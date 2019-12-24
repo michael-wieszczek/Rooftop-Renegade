@@ -24,8 +24,12 @@ public class MainApplication extends Application {
 		Button game = new Button("Start");
 		Button settings = new Button("Settings");
 		Button exit = new Button("Exit");
-		game.setOnAction(e -> System.out.println("Placeholder"));
-		settings.setOnAction(e -> System.out.println("Placeholder"));
+		game.setOnAction(e -> {
+			//Placeholder Code
+		});
+		settings.setOnAction(e -> {
+			//Placeholder Code
+		});
 		exit.setOnAction(e -> {
 			//Save Leaderboards
 			System.exit(0);
@@ -34,7 +38,7 @@ public class MainApplication extends Application {
 		layout.getChildren().addAll(game, settings, exit);
 		BorderPane borderPane = new BorderPane();
 		borderPane.setCenter(layout);
-		Scene scene = new Scene(borderPane, 500, 300);
+		Scene scene = new Scene(borderPane, 800, 500);
 		mainWindow.setTitle("Rooftop Renegade");
 		mainWindow.setScene(scene);
 		mainWindow.show();
