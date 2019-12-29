@@ -4,12 +4,12 @@
 package main;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -23,6 +23,45 @@ public class MainApplication extends Application {
 	 */
 	@Override
 	public void start(Stage mainWindow) throws Exception {
+
+		Button game = new Button("Start");
+		game.setLayoutX(380);
+		game.setLayoutY(250);
+		
+		Button settings = new Button("Settings");
+		settings.setLayoutX(380);
+		settings.setLayoutY(275);
+		
+		Button exit = new Button("Exit");
+		exit.setLayoutX(380);
+		exit.setLayoutY(300);
+		
+		game.setOnAction(e -> {
+			//Placeholder Code
+		});
+		settings.setOnAction(e -> {
+			//Placeholder Code
+		});
+		exit.setOnAction(e -> {
+			//Save Leaderboards
+			Platform.exit();
+		});
+		
+		AnchorPane layout = new AnchorPane();
+		layout.getChildren().addAll(game, settings, exit);
+		BorderPane borderPane = new BorderPane();
+		borderPane.setCenter(layout);
+		Scene scene = new Scene(borderPane, 800, 500);
+		
+		mainWindow.setTitle("Rooftop Renegade");
+		mainWindow.setResizable(false);
+		mainWindow.setMaxWidth(800);
+		mainWindow.setMinWidth(800);
+		mainWindow.setMaxHeight(500);
+		mainWindow.setMinHeight(500);
+		
+		mainWindow.setScene(scene);
+		mainWindow.show();
 
 	}
 
@@ -38,8 +77,6 @@ public class MainApplication extends Application {
 	 * @param g The graphics context
 	 **/
 	public void draw (GraphicsContext gc){
-		gc.setFill(Color.BLACK);
-		gc.fillRect(100, 250, 30, 50);
 
 
 	}
