@@ -23,28 +23,7 @@ public class MainApplication extends Application {
 	 */
 	@Override
 	public void start(Stage mainWindow) throws Exception {
-		mainWindow.setTitle("Rooftop Renegade");
-		
-		mainWindow.setResizable(false);
-		mainWindow.setMaxWidth(800);
-		mainWindow.setMinWidth(800);
-		mainWindow.setMaxHeight(600);
-		mainWindow.setMinHeight(600);
-		
-		Canvas canvas = new Canvas(800, 600);
-		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		canvas.setFocusTraversable(true);
-		
-		draw(gc);
-		
 
-		//Group group = new Group();
-		StackPane layout = new StackPane();
-		layout.getChildren().add(canvas);
-
-		Scene scene = new Scene(layout, 300, 250);
-		mainWindow.setScene(scene);
-		mainWindow.show();
 	}
 
 	/**
@@ -55,15 +34,12 @@ public class MainApplication extends Application {
 	}
 
 	/**
-	 * Display basic information from mouse listeners
+	 * Displays the basic game information
 	 * @param g The graphics context
 	 **/
 	public void draw (GraphicsContext gc){
-		gc.setFill(Color.WHITE);
-		gc.fillRect(0, 0, 800, 600);
-		
 		gc.setFill(Color.BLACK);
-		gc.fillRect(100, 100, 30, 50);
+		gc.fillRect(100, 250, 30, 50);
 
 
 	}
