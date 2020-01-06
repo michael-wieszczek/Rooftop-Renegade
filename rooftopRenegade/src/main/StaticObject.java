@@ -1,4 +1,5 @@
-package main;
+package src.main;
+
 
 public abstract class StaticObject {
 

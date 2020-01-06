@@ -1,7 +1,7 @@
+package src.main;
 /**
  * 
  */
-package main;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,7 +10,21 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.shape.*;
+import javafx.geometry.Pos;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.RowConstraints;
+
 
 /**
  * @author mimlo
@@ -23,21 +37,23 @@ public class MainApplication extends Application {
 	 */
 	@Override
 	public void start(Stage mainWindow) throws Exception {
-
-		Button game = new Button("Start");
-		game.setLayoutX(380);
-		game.setLayoutY(250);
 		
-		Button settings = new Button("Settings");
-		settings.setLayoutX(380);
-		settings.setLayoutY(275);
-		
+		Rectangle r = new Rectangle();
+		r.setFill(Color.LIGHTBLUE);
+		//r.setX(0);
+		//r.setY(0);
+		r.setWidth(600);
+		r.setHeight(400);
+		//r.setArcWidth(20);
+		//r.setArcHeight(20);	
+	      		
+		Button game = new Button("Start");		
+		Button settings = new Button("Settings");		
 		Button exit = new Button("Exit");
-		exit.setLayoutX(380);
-		exit.setLayoutY(300);
 		
 		game.setOnAction(e -> {
 			//Placeholder Code
+			
 		});
 		settings.setOnAction(e -> {
 			//Placeholder Code
@@ -47,22 +63,37 @@ public class MainApplication extends Application {
 			Platform.exit();
 		});
 		
-		AnchorPane layout = new AnchorPane();
-		layout.getChildren().addAll(game, settings, exit);
-		BorderPane borderPane = new BorderPane();
-		borderPane.setCenter(layout);
-		Scene scene = new Scene(borderPane, 800, 500);
+		// Buttom Menu
+		GridPane menu = new GridPane();
+		menu.add(game, 0, 0);
+		menu.add(settings, 0, 1);
+		menu.add(exit, 0, 2);
+		GridPane.setHalignment(game,HPos.CENTER);
+		GridPane.setValignment(game,VPos.BOTTOM);
+		GridPane.setHalignment(settings,HPos.CENTER);
+		GridPane.setHalignment(exit,HPos.CENTER);
+		GridPane.setValignment(exit,VPos.TOP);
+		ColumnConstraints column1 = new ColumnConstraints();
+	    column1.setPercentWidth(100);
+	    column1.setHgrow(Priority.ALWAYS);
+	    menu.getColumnConstraints().addAll(column1);
+		RowConstraints row1 = new RowConstraints(), row2 = new RowConstraints(), row3 = new RowConstraints();
+	    row1.setPercentHeight(50);
+	    row3.setPercentHeight(50);
+	    row1.setVgrow(Priority.ALWAYS);
+	    row3.setVgrow(Priority.ALWAYS);
+	    menu.getRowConstraints().addAll(row1,row2,row3);
+	    		
+		BorderPane pane = new BorderPane();
+		pane.setCenter(menu);
+				
+		Scene scene = new Scene(pane,800,500);
 		
 		mainWindow.setTitle("Rooftop Renegade");
-		mainWindow.setResizable(false);
-		mainWindow.setMaxWidth(800);
-		mainWindow.setMinWidth(800);
-		mainWindow.setMaxHeight(500);
-		mainWindow.setMinHeight(500);
-		
+		mainWindow.setResizable(false);		
 		mainWindow.setScene(scene);
 		mainWindow.show();
-
+		
 	}
 
 	/**
@@ -77,7 +108,7 @@ public class MainApplication extends Application {
 	 * @param g The graphics context
 	 **/
 	public void draw (GraphicsContext gc){
-
+		
 
 	}
 
