@@ -19,6 +19,10 @@ public class Platform extends Sprite{
 		return this.top;
 		
 	}
+	
+	void moveLeft() {
+		setTranslateX(getTranslateX() - 1);
+	}
 
 	
 }

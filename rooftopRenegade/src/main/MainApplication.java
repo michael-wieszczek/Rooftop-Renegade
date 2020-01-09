@@ -54,7 +54,7 @@ public class MainApplication extends Application {
 	}
 
 	private void update() {
-		
+		s2.moveLeft();
 	}
 	
 	public void start (Stage stage) throws Exception {
