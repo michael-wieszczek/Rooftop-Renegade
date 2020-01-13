@@ -7,17 +7,16 @@ public class Sprite extends Rectangle{
 
 
 	private final String type;
-	private int x, y, w, h;
-	private Color color;
-		
-		Sprite(int x, int y, int w, int h, String type, Color color) {
-			super(w, h, color);
-			
-			this.type = type;
-			setTranslateX(x);
-			setTranslateY(y);
-			
-		}
-		
+//	private Color color;
+
+	Sprite(int x, int y, int w, int h, String type, Color color) {
+		super(w, h, color);
+
+		this.type = type;
+		setTranslateX(x);
+		setTranslateY(y);
+
+	}
+
 
 }
