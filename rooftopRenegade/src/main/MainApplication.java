@@ -30,7 +30,7 @@ public class MainApplication extends Application {
 	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
 	private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
-	private int jump = 25;
+	private int jump = 25;//Changes the jump height
 
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
