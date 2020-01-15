@@ -30,6 +30,7 @@ public class MainApplication extends Application {
 	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
 	KeyCode jumpButton;
+	//Get intersection with newly generated platforms
 	Platform p;
 	//private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
