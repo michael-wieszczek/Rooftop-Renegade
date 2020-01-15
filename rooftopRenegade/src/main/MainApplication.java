@@ -3,28 +3,16 @@ package main;
  * 
  */
 
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import java.util.ArrayList;
 
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.GridPane;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.shape.*;
-import javafx.geometry.Pos;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.Text;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.RowConstraints;
 
 
 /**
@@ -32,85 +20,93 @@ import javafx.scene.layout.RowConstraints;
  *
  */
 public class MainApplication extends Application {
-	
-	/* (non-Javadoc)
-	 * @see javafx.application.Application#start(javafx.stage.Stage)
-	 */
-	@Override
-	public void start(Stage mainWindow) throws Exception {
-		
-		Rectangle r = new Rectangle();
-		r.setFill(Color.LIGHTBLUE);
-		//r.setX(0);
-		//r.setY(0);
-		r.setWidth(600);
-		r.setHeight(400);
-		//r.setArcWidth(20);
-		//r.setArcHeight(20);	
-	      		
-		Button game = new Button("Start");		
-		Button settings = new Button("Settings");		
-		Button exit = new Button("Exit");
-		
-		game.setOnAction(e -> {
-			//Placeholder Code
-			
-		});
-		settings.setOnAction(e -> {
-			//Placeholder Code
-		});
-		exit.setOnAction(e -> {
-			//Save Leaderboards
-			Platform.exit();
-		});
-		
-		// Buttom Menu
-		GridPane menu = new GridPane();
-		menu.add(game, 0, 0);
-		menu.add(settings, 0, 1);
-		menu.add(exit, 0, 2);
-		GridPane.setHalignment(game,HPos.CENTER);
-		GridPane.setValignment(game,VPos.BOTTOM);
-		GridPane.setHalignment(settings,HPos.CENTER);
-		GridPane.setHalignment(exit,HPos.CENTER);
-		GridPane.setValignment(exit,VPos.TOP);
-		ColumnConstraints column1 = new ColumnConstraints();
-	    column1.setPercentWidth(100);
-	    column1.setHgrow(Priority.ALWAYS);
-	    menu.getColumnConstraints().addAll(column1);
-		RowConstraints row1 = new RowConstraints(), row2 = new RowConstraints(), row3 = new RowConstraints();
-	    row1.setPercentHeight(50);
-	    row3.setPercentHeight(50);
-	    row1.setVgrow(Priority.ALWAYS);
-	    row3.setVgrow(Priority.ALWAYS);
-	    menu.getRowConstraints().addAll(row1,row2,row3);
-	    		
-		BorderPane pane = new BorderPane();
-		pane.setCenter(menu);
+
+	private Pane root = new Pane();
+
+	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
+	ArrayList<Platform> platforms = new ArrayList<Platform>();
+	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
+	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
+	KeyCode jumpButton;
+	//private Point2D playerVelocity = new Point2D(0, 0);
+	private boolean canJump = true;
+	private int jump = 25;//Changes the jump height
+
+	private Parent initGame() {
+		root.setPrefSize(800, 600);
+
+		root.getChildren().add(player);
+
+		AnimationTimer timer = new AnimationTimer() {
+
+			public void handle(long now) {
+				//See's if player is on a platform, and takes gravity into account
+				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
+					canJump = true;
+				}
+				else {
+					player.gravity();
+				}
+				if(canJump == true) {
+					//Need to make it when up or space is inputted this will work.
+					if(jumpButton == KeyCode.SPACE)
+					if(jump >= 0) {
+						player.jump(jump);
+						jump--;
+					}
+					else {
+						canJump = false;
+						jump = 25;
+						jumpButton = KeyCode.ALT;
+					}
+				}
+					
 				
-		Scene scene = new Scene(pane,800,500);
-		
-		mainWindow.setTitle("Rooftop Renegade");
-		mainWindow.setResizable(false);		
-		mainWindow.setScene(scene);
-		mainWindow.show();
-		
+			}
+		};
+
+		timer.start();
+
+		platform();
+
+		return root;
 	}
 
-	/**
-	 * @param args
-	 */
+	private void platform() {
+
+		root.getChildren().addAll(s, s2);
+	}
+
+
+	public void start (Stage stage) throws Exception {
+		Scene scene = new Scene(initGame());
+
+		jumpButton = KeyCode.ALT;
+
+		scene.setOnKeyPressed(e -> {
+			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {
+				jumpButton = KeyCode.SPACE;
+			}
+			else if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
+				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
+					boolean canJump = true;
+				}
+				else {
+					player.gravity();
+				}
+
+			}
+
+		});
+
+		stage.setScene(scene);
+		stage.show();
+
+	}
+
+
 	public static void main(String[] args) {
 		launch(args);
-	}
-
-	/**
-	 * Displays the basic game information
-	 * @param g The graphics context
-	 **/
-	public void draw (GraphicsContext gc){
-		
 
 	}
-
 }
