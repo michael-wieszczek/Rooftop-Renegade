@@ -39,6 +39,7 @@ public class MainApplication extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
+				update();
 				System.out.println(System.currentTimeMillis());
 			}
 		};
@@ -48,6 +49,9 @@ public class MainApplication extends Application {
 		platform();
 
 		return root;
+	}
+	private void update(){
+		
 	}
 
 	private void platform() {
