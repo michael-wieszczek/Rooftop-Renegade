@@ -30,6 +30,7 @@ public class MainApplication extends Application {
 	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
 	KeyCode jumpButton;
+	Platform p;
 	//private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
 	private int jump = 25;//Changes the jump height
@@ -42,8 +43,9 @@ public class MainApplication extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
+				platform();
 				//See's if player is on a platform, and takes gravity into account
-				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
+				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent()) || player.getBoundsInParent().intersects(p.getBoundsInParent())) {
 					canJump = true;
 				}
 				else {
@@ -75,13 +77,18 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
+		
+		if((int)(Math.random() * 1000) <= 15) {
+			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
+			root.getChildren().add(p);
+		}
 
-		root.getChildren().addAll(s, s2);
 	}
 
 
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
+		root.getChildren().addAll(s, s2);
 
 		jumpButton = KeyCode.ALT;
 
@@ -89,16 +96,6 @@ public class MainApplication extends Application {
 			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {
 				jumpButton = KeyCode.SPACE;
 			}
-			else if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
-				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
-					boolean canJump = true;
-				}
-				else {
-					player.gravity();
-				}
-
-			}
-
 		});
 		stage.setScene(scene);
 		stage.show();
