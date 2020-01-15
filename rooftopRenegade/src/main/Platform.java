@@ -35,7 +35,7 @@ public class Platform extends Sprite{
 	}
 
 	void moveLeft() {
-		setTranslateX(getTranslateX() - 1.5);
+		setTranslateX(getTranslateX() - 2);
 	}
 
 }

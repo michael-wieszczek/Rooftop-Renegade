@@ -22,13 +22,15 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
 
 
+
 	private Pane root = new Pane();
 
 	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
-	private Point2D playerVelocity = new Point2D(0, 0);
+	KeyCode jumpButton;
+	//private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
 	private int jump = 25;//Changes the jump height
 
@@ -49,6 +51,7 @@ public class MainApplication extends Application {
 				}
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
+					if(jumpButton == KeyCode.SPACE)
 					if(jump >= 0) {
 						player.jump(jump);
 						jump--;
@@ -56,6 +59,7 @@ public class MainApplication extends Application {
 					else {
 						canJump = false;
 						jump = 25;
+						jumpButton = KeyCode.ALT;
 					}
 				}
 					
@@ -79,11 +83,11 @@ public class MainApplication extends Application {
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
 
-
+		jumpButton = KeyCode.ALT;
 
 		scene.setOnKeyPressed(e -> {
-			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
-				
+			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {
+				jumpButton = KeyCode.SPACE;
 			}
 			else if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
 				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
