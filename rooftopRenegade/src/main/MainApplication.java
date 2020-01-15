@@ -50,18 +50,18 @@ public class MainApplication extends Application {
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
-					if(jump >= 0) {
-						player.jump(jump);
-						jump--;
-					}
-					else {
-						canJump = false;
-						jump = 25;
-						jumpButton = KeyCode.ALT;
-					}
+						if(jump >= 0) {
+							player.jump(jump);
+							jump--;
+						}
+						else {
+							canJump = false;
+							jump = 25;
+							jumpButton = KeyCode.ALT;
+						}
 				}
-					
-				
+
+
 			}
 		};
 
@@ -110,3 +110,4 @@ public class MainApplication extends Application {
 
 	}
 }
+
