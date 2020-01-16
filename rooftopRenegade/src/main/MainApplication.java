@@ -23,15 +23,26 @@ public class MainApplication extends Application {
 
 	private Pane root = new Pane();
 
+	//Making the Player
 	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
-	ArrayList<Platform> platforms = new ArrayList<Platform>();
-	Platform s = new Platform(0, 340, 800, 5, "platform", Color.BLACK);
-	Platform s2 = new Platform(450, 240, 500, 5, "platform", Color.BLACK);
-	KeyCode jumpButton;
-	//private Point2D playerVelocity = new Point2D(0, 0);
-	private boolean canJump = true;
-	private int jump = 25;//Changes the jump height
 
+	//Starting Platforms
+	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
+	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
+
+
+	//Making Platforms and Coins
+	ArrayList<Platform> platforms = new ArrayList<Platform>();
+	ArrayList<Coins> coins = new ArrayList<Coins>();
+	Platform p;
+	Coins c;
+	int numCoins = 0;
+		
+	//Jumping 
+	private boolean canJump = true;
+	private int jump = 25;
+	KeyCode jumpButton;
+	
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
 
@@ -40,13 +51,28 @@ public class MainApplication extends Application {
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
+				platform();
+				coins();
 				//See's if player is on a platform, and takes gravity into account
-				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
-					canJump = true;
+				for(int i = 0; i < platforms.size();i++) {
+
+					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
+						canJump = true;
+						player.antiGravity();
+					}
 				}
-				else {
-					player.gravity();
+
+				for(int i = 0; i < coins.size(); i++) {
+					if(player.getBoundsInParent().intersects(coins.get(i).getBoundsInParent())) {
+						root.getChildren().remove(coins.get(i));
+						coins.remove(i);
+						numCoins++;
+						System.out.println(numCoins);
+					}
 				}
+				player.gravity();
+
+
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
@@ -73,13 +99,30 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
+		//How and where platforms spawn, and how commonly they appear
+		if((int)(Math.random() * 1000) <= 50) {
+			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
+			platforms.add(p);
+			root.getChildren().add(p);
+		}
 
-		root.getChildren().addAll(s, s2);
+	}
+
+	private void coins() {
+		if((int)(Math.random() * 1000) <= 15) {
+			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
+			coins.add(c);
+			root.getChildren().add(c);
+		}
+
 	}
 
 
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
+		platforms.add(s);
+		platforms.add(s2);
+		root.getChildren().addAll(s, s2);
 
 		jumpButton = KeyCode.ALT;
 
@@ -87,16 +130,6 @@ public class MainApplication extends Application {
 			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {
 				jumpButton = KeyCode.SPACE;
 			}
-			else if(e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
-				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent())) {
-					boolean canJump = true;
-				}
-				else {
-					player.gravity();
-				}
-
-			}
-
 		});
 
 		stage.setScene(scene);

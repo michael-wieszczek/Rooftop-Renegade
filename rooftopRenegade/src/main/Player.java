@@ -30,6 +30,9 @@ public class Player extends Sprite{
 	public void gravity() {
 		setTranslateY(getTranslateY() + 10);
 	}
+	void antiGravity() {
+		setTranslateY(getTranslateY() - 10);
+	}
 
 
 }

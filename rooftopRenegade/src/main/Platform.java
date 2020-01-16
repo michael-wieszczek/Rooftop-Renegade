@@ -12,7 +12,6 @@ public class Platform extends Sprite{
 	public Platform(int x, int y, int w, int h, String type, Color color) {
 		super(x, y, w, h, type, color);
 
-		this.top = top;
 		this.xSpeed = 1;
 		
 		AnimationTimer timer = new AnimationTimer() {
@@ -30,12 +29,14 @@ public class Platform extends Sprite{
 	}
 
 	public int getTop(){
-		return this.top;
+		return (int)this.getX();
 
 	}
 
+
 	private void moveLeft() {
-		setTranslateX(getTranslateX() - 2);
+		setTranslateX(getTranslateX() - 7);
+
 	}
 
 }
