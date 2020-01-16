@@ -9,7 +9,7 @@ public class Platform extends Sprite{
 	int top;
 	boolean moving;
 
-	public Platform(int x, int y, int w, int h, int top, String type, Color color) {
+	public Platform(int x, int y, int w, int h, String type, Color color) {
 		super(x, y, w, h, type, color);
 
 		this.top = top;
@@ -34,7 +34,7 @@ public class Platform extends Sprite{
 
 	}
 
-	void moveLeft() {
+	private void moveLeft() {
 		setTranslateX(getTranslateX() - 2);
 	}
 

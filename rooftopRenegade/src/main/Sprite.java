@@ -7,9 +7,9 @@ public class Sprite extends Rectangle{
 
 
 	private final String type;
-//	private Color color;
 
-	Sprite(int x, int y, int w, int h, String type, Color color) {
+
+	public Sprite(int x, int y, int w, int h, String type, Color color) {
 		super(w, h, color);
 
 		this.type = type;
