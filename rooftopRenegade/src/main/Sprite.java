@@ -18,5 +18,5 @@ public class Sprite extends Rectangle{
 
 	}
 
-
 }
+

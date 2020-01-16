@@ -1,5 +1,4 @@
 package main;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -35,3 +34,4 @@ public class Player extends Sprite{
 
 
 }
+
