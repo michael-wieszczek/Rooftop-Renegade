@@ -58,10 +58,11 @@ public class MainApplication extends Application {
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						if(player.getBottom() > platforms.get(i).getTop()-10 &&
-								player.getBottom() < platforms.get(i).getTop()+10) {
+						//player.getBottom() > platforms.get(i).getTop()-10 &&
+						if(	player.getBottom() < platforms.get(i).getTop()+10) {
 							player.setY(platforms.get(i).getTop() - player.getHeight());
 							canJump = true;
+							System.out.println(canJump);
 							player.antiGravity();
 						}							
 					}
@@ -79,6 +80,7 @@ public class MainApplication extends Application {
 
 
 				if(canJump == true) {
+					System.out.println(jump);
 					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
 						if(jump >= 0) {
