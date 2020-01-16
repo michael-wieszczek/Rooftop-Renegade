@@ -13,8 +13,8 @@ public class Sprite extends Rectangle{
 		super(w, h, color);
 
 		this.type = type;
-		setTranslateX(x);
-		setTranslateY(y);
+		setX(x);
+		setY(y);
 
 	}
 

@@ -29,13 +29,13 @@ public class Platform extends Sprite{
 	}
 
 	public int getTop(){
-		return (int)this.getX();
+		return (int)getY();
 
 	}
 
 
 	private void moveLeft() {
-		setTranslateX(getTranslateX() - 7);
+		setX(getX() - 7);
 
 	}
 

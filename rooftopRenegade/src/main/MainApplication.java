@@ -47,6 +47,7 @@ public class MainApplication extends Application {
 		root.setPrefSize(800, 600);
 
 		root.getChildren().add(player);
+		
 
 		AnimationTimer timer = new AnimationTimer() {
 
@@ -57,8 +58,12 @@ public class MainApplication extends Application {
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						canJump = true;
-						player.antiGravity();
+						System.out.print(player.getBottom() + ", ");
+						System.out.println(platforms.get(i).getTop());
+						if(player.getBottom() >= platforms.get(i).getTop()) {
+							canJump = true;
+							player.antiGravity();
+						}
 					}
 				}
 

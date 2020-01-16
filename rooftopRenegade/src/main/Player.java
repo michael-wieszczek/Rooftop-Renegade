@@ -21,17 +21,17 @@ public class Player extends Sprite{
 	}
 
 	public void jump(int jump) {
-		setTranslateY(getTranslateY() - jump);
+		setY(getY() - jump);
 
 	}
 	public int getBottom(){
-		return (int)(this.getX()+ this.getHeight());
+		return (int)(this.getY()+ this.getHeight());
 	}
 	public void gravity() {
-		setTranslateY(getTranslateY() + 10);
+		setY(getY() + 10);
 	}
 	void antiGravity() {
-		setTranslateY(getTranslateY() - 10);
+		setY(getY() - 10);
 	}
 
 

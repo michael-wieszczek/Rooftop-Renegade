@@ -23,7 +23,7 @@ public class Coins extends Sprite{
 	}
 
 	void moveLeft() {
-		setTranslateX(getTranslateX() - 7);
+		setX(getX() - 7);
 	}
 
 }
