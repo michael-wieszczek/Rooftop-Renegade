@@ -58,12 +58,12 @@ public class MainApplication extends Application {
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						System.out.print(player.getBottom() + ", ");
-						System.out.println(platforms.get(i).getTop());
-						if(player.getBottom() >= platforms.get(i).getTop()) {
+						if(player.getBottom() > platforms.get(i).getTop()-10 &&
+								player.getBottom() < platforms.get(i).getTop()+10) {
+							player.setY(platforms.get(i).getTop() - player.getHeight());
 							canJump = true;
 							player.antiGravity();
-						}
+						}							
 					}
 				}
 
@@ -106,7 +106,7 @@ public class MainApplication extends Application {
 	private void platform() {
 		//How and where platforms spawn, and how commonly they appear
 		if((int)(Math.random() * 1000) <= 50) {
-			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
+			p = new Platform(800, (int)(Math.random() * 13 + 10) * 20, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
