@@ -94,7 +94,7 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
-		
+		//How and where platforms spawn, and how commonly
 		if((int)(Math.random() * 1000) <= 50) {
 			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
 			platforms.add(p);
