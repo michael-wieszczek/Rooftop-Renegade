@@ -27,11 +27,15 @@ public class MainApplication extends Application {
 
 	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
+	ArrayList<Coins> coins = new ArrayList<Coins>();
 	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
+	Coins c1 = new Coins(600, 400, 40, 40, "coin", Color.YELLOW);
 	KeyCode jumpButton;
 	//Get intersection with newly generated platforms
 	Platform p;
+	Coins c;
+	int numCoins = 0;
 	//private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
 	private int jump = 25;//Changes the jump height
@@ -45,13 +49,27 @@ public class MainApplication extends Application {
 
 			public void handle(long now) {
 				platform();
+				coins();
 				//See's if player is on a platform, and takes gravity into account
-				if(player.getBoundsInParent().intersects(s.getBoundsInParent()) || player.getBoundsInParent().intersects(s2.getBoundsInParent()) || player.getBoundsInParent().intersects(p.getBoundsInParent())) {
+				for(int i = 0; i < platforms.size();i++) {
+					
+				if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
 					canJump = true;
+					player.antiGravity();
+					}
 				}
-				else {
-					player.gravity();
+				
+				for(int i = 0; i < coins.size(); i++) {
+					if(player.getBoundsInParent().intersects(coins.get(i).getBoundsInParent())) {
+						root.getChildren().remove(coins.get(i));
+						coins.remove(i);
+						numCoins++;
+						System.out.println(numCoins);
+					}
 				}
+				player.gravity();
+				
+				
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
@@ -79,16 +97,28 @@ public class MainApplication extends Application {
 
 	private void platform() {
 		
-		if((int)(Math.random() * 1000) <= 15) {
+		if((int)(Math.random() * 1000) <= 50) {
 			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
+			platforms.add(p);
 			root.getChildren().add(p);
 		}
 
+	}
+	
+	private void coins() {
+		if((int)(Math.random() * 1000) <= 15) {
+			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
+			coins.add(c);
+			root.getChildren().add(c);
+		}
+		
 	}
 
 
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
+		platforms.add(s);
+		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
 
 		jumpButton = KeyCode.ALT;
