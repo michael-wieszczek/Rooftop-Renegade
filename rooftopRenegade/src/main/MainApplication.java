@@ -27,7 +27,6 @@ public class MainApplication extends Application {
 	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
 
 	//Starting Platforms
-
 	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
 
