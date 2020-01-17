@@ -6,6 +6,8 @@ package main;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 /**
@@ -36,41 +39,56 @@ public class MainApplication extends Application {
 	int numCoins = 0;
 	//private Point2D playerVelocity = new Point2D(0, 0);
 	private boolean canJump = true;
+	private boolean doubleJump = true;
 	private int jump = 25;//Changes the jump height
+	private int score = 0;
+	public int speed = 7;
+	boolean isDead = false;
 
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
 
 		root.getChildren().add(player);
+		
+		Timeline scorePoints = new Timeline(
+				new KeyFrame(Duration.millis(400), e -> {
+					score++;
+					System.out.println(score); //temp
+				})
+		);
+		scorePoints.setCycleCount(Timeline.INDEFINITE);
+		scorePoints.play();
+		
 
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
+				
 				platform();
 				coins();
 				//See's if player is on a platform, and takes gravity into account
 				for(int i = 0; i < platforms.size();i++) {
-					
-				if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-					canJump = true;
-					player.antiGravity();
+
+					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
+						canJump = true;
+						doubleJump = true;
+						player.antiGravity();
 					}
 				}
-				
+
 				for(int i = 0; i < coins.size(); i++) {
 					if(player.getBoundsInParent().intersects(coins.get(i).getBoundsInParent())) {
 						root.getChildren().remove(coins.get(i));
 						coins.remove(i);
 						numCoins++;
-						System.out.println(numCoins);
+						score += 10;
 					}
 				}
 				player.gravity();
-				
-				
+
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
-					if(jumpButton == KeyCode.SPACE)
+					if(jumpButton == KeyCode.SPACE) {
 						if(jump >= 0) {
 							player.jump(jump);
 							jump--;
@@ -80,12 +98,29 @@ public class MainApplication extends Application {
 							jump = 25;
 							jumpButton = KeyCode.ALT;
 						}
+					}
+				}
+				else if(doubleJump == true) {
+					if(jumpButton == KeyCode.SPACE) {
+						if(jump >= 0) {
+							player.jump(jump);
+							jump--;
+						}
+						else {
+							doubleJump = false;
+							jump = 25;
+							jumpButton = KeyCode.ALT;
+						}
+					}
+				}
+				//Checks to see if player fell below death level
+				if(player.getTranslateY() <= 600) {
+					//timer.stop();
 				}
 
 
 			}
 		};
-
 		timer.start();
 
 		platform();
@@ -102,14 +137,14 @@ public class MainApplication extends Application {
 		}
 
 	}
-	
+
 	private void coins() {
 		if((int)(Math.random() * 1000) <= 15) {
 			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
 			coins.add(c);
 			root.getChildren().add(c);
 		}
-		
+
 	}
 
 
