@@ -31,6 +31,7 @@ public class MainApplication extends Application {
 
 	ImagePattern playerRun = null;
 	ImagePattern playerJump = null;
+	ImagePattern coin = null;
 	Node icon;
 	private Player player = null;
 
@@ -122,8 +123,13 @@ public class MainApplication extends Application {
 
 
 	private void coins() {
+		try {
+			coin = new ImagePattern(new Image (new FileInputStream ("Resources/Coin 10FPS.gif")));
+		}catch (FileNotFoundException e) {
+
+		}
 		if((int)(Math.random() * 1000) <= 8) {
-			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", Color.YELLOW);
+			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", coin);
 
 			coins.add(c);
 			root.getChildren().add(c);

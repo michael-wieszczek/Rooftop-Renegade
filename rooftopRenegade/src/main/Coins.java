@@ -2,11 +2,12 @@ package main;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class Coins extends Sprite{
 
-	Coins(int x, int y, int w, int h, String type, Color color) {
-		super(x, y, w, h, type, color);
+	Coins(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
+		super(x, y, w, h, type, imagePattern);
 		
 		AnimationTimer timer = new AnimationTimer() {
 
