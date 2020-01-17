@@ -21,6 +21,7 @@ public class Coins extends Sprite{
 
 	void moveLeft() {
 		setX(getX() - 7);
+
 	}
 
 }

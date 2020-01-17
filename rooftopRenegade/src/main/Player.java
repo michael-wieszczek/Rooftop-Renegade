@@ -30,7 +30,7 @@ public class Player extends Sprite{
 	public void gravity() {
 		setY(getY() + 10);
 	}
-	void antiGravity() {
+	public void antiGravity() {
 		setY(getY() - 10);
 	}
 
