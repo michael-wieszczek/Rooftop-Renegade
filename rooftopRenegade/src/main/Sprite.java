@@ -10,7 +10,7 @@ public class Sprite extends Rectangle{
 
 	private ImageView image;
 	private final String type;
-//	private Color color;
+
 
 	Sprite(int x, int y, int w, int h, String type, ImageView image) {
 		super(w, h);
@@ -23,11 +23,12 @@ public class Sprite extends Rectangle{
 	}
 	
 	Sprite(int x, int y, int w, int h, String type, Color color) {
+
 		super(w, h, color);
 
 		this.type = type;
-		setTranslateX(x);
-		setTranslateY(y);
+		setX(x);
+		setY(y);
 
 	}
 

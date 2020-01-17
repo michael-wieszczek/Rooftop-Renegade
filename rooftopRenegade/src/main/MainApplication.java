@@ -27,40 +27,53 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
 
 	private Pane root = new Pane();
+
 	Image playerRun = null;
 	Node icon;
-	
 	private Player player = null;
+
+	//Making the Player
+	//	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
+
+	//Starting Platforms
+	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
+	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
+
+
+	//Making Platforms and Coins
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	ArrayList<Coins> coins = new ArrayList<Coins>();
-	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
-	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
-	Coins c1 = new Coins(600, 400, 40, 40, "coin", Color.YELLOW);
-	KeyCode jumpButton;
-	//Get intersection with newly generated platforms
 	Platform p;
 	Coins c;
 	int numCoins = 0;
-	//private Point2D playerVelocity = new Point2D(0, 0);
+
+	//Jumping 
 	private boolean canJump = true;
-	private int jump = 25;//Changes the jump height
+	private int jump = 25;
+	KeyCode jumpButton;
 
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
 
 		root.getChildren().add(player);
 
+
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
-				platform();
 				coins();
+				platform();
+
 				//See's if player is on a platform, and takes gravity into account
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						canJump = true;
-						player.antiGravity();
+						if(	player.getBottom() < platforms.get(i).getTop()+10) {
+							player.setY(platforms.get(i).getTop() - player.getHeight());
+							canJump = true;
+							player.antiGravity();
+						}							
+
 					}
 				}
 
@@ -76,7 +89,6 @@ public class MainApplication extends Application {
 
 
 				if(canJump == true) {
-					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
 						if(jump >= 0) {
 							player.jump(jump);
@@ -101,23 +113,19 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
-		//How and where platforms spawn, and how commonly they appear
-		if((int)(Math.random() * 1000) <= 10) {
-			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
-			platforms.add(p);
-			root.getChildren().add(p);
-		}
-		if (platforms.size() > 0 && (800 - ((platforms.get(platforms.size()-1).getX()) + (platforms.get(platforms.size()-1).getWidth()))) >=50) {
-			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
+		if((int)(Math.random() * 1000) <= 45) {
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
 
 	}
 
+
 	private void coins() {
-		if((int)(Math.random() * 1000) <= 15) {
-			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
+		if((int)(Math.random() * 1000) <= 8) {
+			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", Color.YELLOW);
+
 			coins.add(c);
 			root.getChildren().add(c);
 		}
@@ -131,9 +139,9 @@ public class MainApplication extends Application {
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
 		try {
-		Image playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
+			Image playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
 		}catch (FileNotFoundException e) {
-			
+
 		}
 		ImageView playerRunV = new ImageView(playerRun);
 
@@ -149,7 +157,7 @@ public class MainApplication extends Application {
 		stage.show();
 
 		player = new Player(300, 280, 40, 60, "player", 
-		icon = playerRunV;
+				icon = playerRunV;
 	}
 
 

@@ -8,9 +8,12 @@ public class Player extends Sprite{
 
 
 	private boolean dead = false;
+	
+
 
 	Player(int x, int y, int w, int h, String type, ImageView image) {
 		super(x, y, w, h, type, image);
+
 			
 		AnimationTimer timer = new AnimationTimer() {
 
@@ -21,17 +24,18 @@ public class Player extends Sprite{
 		timer.start();
 	}
 
-	void jump(int jump) {
-		setTranslateY(getTranslateY() - jump);
-
+	public void jump(int jump) {
+		setY(getY() - jump);
 
 	}
-
-	void gravity() {
-		setTranslateY(getTranslateY() + 10);
+	public int getBottom(){
+		return (int)(this.getY()+ this.getHeight());
 	}
-	void antiGravity() {
-		setTranslateY(getTranslateY() - 10);
+	public void gravity() {
+		setY(getY() + 10);
+	}
+	public void antiGravity() {
+		setY(getY() - 10);
 	}
 
 

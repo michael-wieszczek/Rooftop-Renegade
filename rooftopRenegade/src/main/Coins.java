@@ -12,10 +12,7 @@ public class Coins extends Sprite{
 
 			public void handle(long now) {
 				moveLeft();
-				//When platform goes off screen it would despawn
-//				if(getTranslateX() - Platform.this.getWidth() == 0 - Platform.this.getWidth()) {
-//					System.out.println("yeet");
-//				}
+
 			}
 		};
 
@@ -23,7 +20,8 @@ public class Coins extends Sprite{
 	}
 
 	void moveLeft() {
-		setTranslateX(getTranslateX() - 7);
+		setX(getX() - 7);
+
 	}
 
 }
