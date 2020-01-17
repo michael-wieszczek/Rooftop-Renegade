@@ -32,14 +32,20 @@ public class MainApplication extends Application {
 	ImagePattern playerRun = null;
 	ImagePattern playerJump = null;
 	ImagePattern coin = null;
+	ImagePattern backgroundP = null;
+	ImagePattern backgroundT = null;
+	ImagePattern backgroundB = null;
 	Node icon;
 	private Player player = null;
 
+	
 	//Starting Platforms
 	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
-
-
+	
+	Background background = new Background(0, 0, 3724, 608, "background", backgroundP);
+	Background background2 = new Background(3724, 0, 3724, 608, "background", backgroundT);
+	Background background3 = new Background(7448, 0, 3724, 608, "background", backgroundB);
 	//Making Platforms and Coins
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	ArrayList<Coins> coins = new ArrayList<Coins>();
@@ -100,6 +106,10 @@ public class MainApplication extends Application {
 							jumpButton = KeyCode.ALT;
 						}
 				}
+				
+				if (background.getX() == -2924) {
+					
+				}
 
 
 			}
@@ -114,7 +124,7 @@ public class MainApplication extends Application {
 
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 45) {
-			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.DARKGRAY);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
@@ -140,12 +150,16 @@ public class MainApplication extends Application {
 
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
+		root.getChildren().addAll(background, background2, background3);
 		platforms.add(s);
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
 		try {
 			playerRun = new ImagePattern(new Image (new FileInputStream ("Resources/Walking15.gif")));
 			playerJump = new ImagePattern(new Image (new FileInputStream ("Resources/JumpAnimation (1).gif")));
+			backgroundP = new ImagePattern(new Image (new FileInputStream ("Resources/BachgroundGoodPiece.png")));
+			backgroundT = new ImagePattern(new Image (new FileInputStream ("Resources/Transition.png")));
+			backgroundB = new ImagePattern(new Image (new FileInputStream ("Resources/BadBackgroundGood.png")));
 		}catch (FileNotFoundException e) {
 
 		}
@@ -156,7 +170,10 @@ public class MainApplication extends Application {
 				jumpButton = KeyCode.SPACE;
 			}
 		});
-
+		
+		background.setFill(backgroundP);
+		background2.setFill(backgroundT);
+		background3.setFill(backgroundB);
 		player = new Player(300, 280, 40, 60, "player", playerRun);
 		root.getChildren().add(player);
 		stage.setScene(scene);

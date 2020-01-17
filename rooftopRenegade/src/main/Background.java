@@ -1,18 +1,12 @@
 package main;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
-public class Platform extends Sprite{
-
-	double xSpeed;
-	int top;
-	boolean moving;
-
-	public Platform(int x, int y, int w, int h, String type, Color color) {
-		super(x, y, w, h, type, color);
+public class Background extends Sprite{
+	public Background(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
+		super(x, y, w, h, type, imagePattern);
 
 		this.xSpeed = 1;
 		
@@ -27,15 +21,7 @@ public class Platform extends Sprite{
 		timer.start();
 	}
 
-
-	public int getTop(){
-		return (int)getY();
-
-	}
-
 	private void moveLeft() {
-		setX(getX() - 7);
+		setX(getX() - 5);
 	}
-
 }
-
