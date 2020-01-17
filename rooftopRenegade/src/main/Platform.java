@@ -3,8 +3,10 @@ package main;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javafx.scene.paint.ImagePattern;
 
 public class Platform extends Sprite{
 	private double speed = 7;
@@ -32,6 +34,7 @@ public class Platform extends Sprite{
 
 		timer.start();
 	}
+
 
 	public int getTop(){
 		return (int)getY();

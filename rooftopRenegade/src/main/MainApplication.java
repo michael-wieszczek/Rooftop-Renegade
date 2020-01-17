@@ -3,17 +3,23 @@ package main;
  * 
  */
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -28,15 +34,23 @@ public class MainApplication extends Application {
 	
 	private Pane root = new Pane();
 
-	//Making the Player
-	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
+	ImagePattern playerRun = null;
+	ImagePattern playerJump = null;
+	ImagePattern coin = null;
+	ImagePattern backgroundP = null;
+	ImagePattern backgroundT = null;
+	ImagePattern backgroundB = null;
+	Node icon;
+	private Player player = null;
 
+	
 	//Starting Platforms
-
 	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
 	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
-
-
+	
+	Background background = new Background(0, 0, 3724, 608, "background", backgroundP);
+	Background background2 = new Background(3724, 0, 3724, 608, "background", backgroundT);
+	Background background3 = new Background(7448, 0, 3724, 608, "background", backgroundB);
 	//Making Platforms and Coins
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	ArrayList<Coins> coins = new ArrayList<Coins>();
@@ -54,8 +68,6 @@ public class MainApplication extends Application {
 
 	public Parent initGame() {
 		root.setPrefSize(800, 600);
-
-		root.getChildren().add(player);
 		
 		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
@@ -65,7 +77,6 @@ public class MainApplication extends Application {
 		);
 		scorePoints.setCycleCount(Timeline.INDEFINITE);
 		scorePoints.play();
-		
 
 
 		timer = new AnimationTimer() {
@@ -83,7 +94,10 @@ public class MainApplication extends Application {
 							canJump = true;
 							doubleJump = true;
 							player.antiGravity();
+							player.setFill(playerRun);
 						}							
+
+
 					}
 				}
 
@@ -101,6 +115,7 @@ public class MainApplication extends Application {
 						if(jump >= 0) {
 							player.jump(jump);
 							jump--;
+							player.setFill(playerJump);
 						}
 						else {
 							canJump = false;
@@ -126,6 +141,7 @@ public class MainApplication extends Application {
 					System.out.println("dead");
 					dead(timer);
 				}
+
 			}
 			
 		};
@@ -140,7 +156,7 @@ public class MainApplication extends Application {
 		timer.stop();
 		scorePoints.stop();
 	}
-
+	
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 20) {
 			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
@@ -159,8 +175,14 @@ public class MainApplication extends Application {
 	}
 
 	private void coins() {
+		try {
+			coin = new ImagePattern(new Image (new FileInputStream ("Resources/Coin 10FPS.gif")));
+		}catch (FileNotFoundException e) {
+
+		}
+
 		if((int)(Math.random() * 1000) <= 8) {
-			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", Color.YELLOW);
+			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", coin);
 			coins.add(c);
 			root.getChildren().add(c);
 		}
@@ -170,10 +192,19 @@ public class MainApplication extends Application {
 
 	public void start (Stage stage) throws Exception {
 		Scene scene = new Scene(initGame());
+		root.getChildren().addAll(background, background2, background3);
 		platforms.add(s);
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
+		try {
+			playerRun = new ImagePattern(new Image (new FileInputStream ("Resources/Walking15.gif")));
+			playerJump = new ImagePattern(new Image (new FileInputStream ("Resources/JumpAnimation (1).gif")));
+			backgroundP = new ImagePattern(new Image (new FileInputStream ("Resources/BachgroundGoodPiece.png")));
+			backgroundT = new ImagePattern(new Image (new FileInputStream ("Resources/Transition.png")));
+			backgroundB = new ImagePattern(new Image (new FileInputStream ("Resources/BadBackgroundGood.png")));
+		}catch (FileNotFoundException e) {
 
+		}
 		jumpButton = KeyCode.ALT;
 		
 		
@@ -183,10 +214,16 @@ public class MainApplication extends Application {
 				jumpButton = KeyCode.SPACE;
 			}
 		});
-
+		
+		background.setFill(backgroundP);
+		background2.setFill(backgroundT);
+		background3.setFill(backgroundB);
+		player = new Player(300, 280, 40, 60, "player", playerRun);
+		root.getChildren().add(player);
 		stage.setScene(scene);
 		stage.show();
 
+		
 	}
 
 
