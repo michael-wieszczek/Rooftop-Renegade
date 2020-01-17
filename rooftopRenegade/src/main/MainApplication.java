@@ -3,12 +3,17 @@ package main;
  * 
  */
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -22,8 +27,10 @@ import javafx.stage.Stage;
 public class MainApplication extends Application {
 
 	private Pane root = new Pane();
-
-	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
+	Image playerRun = null;
+	Node icon;
+	
+	private Player player = null;
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	ArrayList<Coins> coins = new ArrayList<Coins>();
 	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
@@ -50,13 +57,13 @@ public class MainApplication extends Application {
 				coins();
 				//See's if player is on a platform, and takes gravity into account
 				for(int i = 0; i < platforms.size();i++) {
-					
-				if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-					canJump = true;
-					player.antiGravity();
+
+					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
+						canJump = true;
+						player.antiGravity();
 					}
 				}
-				
+
 				for(int i = 0; i < coins.size(); i++) {
 					if(player.getBoundsInParent().intersects(coins.get(i).getBoundsInParent())) {
 						root.getChildren().remove(coins.get(i));
@@ -66,8 +73,8 @@ public class MainApplication extends Application {
 					}
 				}
 				player.gravity();
-				
-				
+
+
 				if(canJump == true) {
 					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
@@ -95,21 +102,26 @@ public class MainApplication extends Application {
 
 	private void platform() {
 		//How and where platforms spawn, and how commonly they appear
-		if((int)(Math.random() * 1000) <= 50) {
+		if((int)(Math.random() * 1000) <= 10) {
+			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
+			platforms.add(p);
+			root.getChildren().add(p);
+		}
+		if (platforms.size() > 0 && (800 - ((platforms.get(platforms.size()-1).getX()) + (platforms.get(platforms.size()-1).getWidth()))) >=50) {
 			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
 
 	}
-	
+
 	private void coins() {
 		if((int)(Math.random() * 1000) <= 15) {
 			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
 			coins.add(c);
 			root.getChildren().add(c);
 		}
-		
+
 	}
 
 
@@ -118,6 +130,12 @@ public class MainApplication extends Application {
 		platforms.add(s);
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
+		try {
+		Image playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
+		}catch (FileNotFoundException e) {
+			
+		}
+		ImageView playerRunV = new ImageView(playerRun);
 
 		jumpButton = KeyCode.ALT;
 
@@ -130,6 +148,8 @@ public class MainApplication extends Application {
 		stage.setScene(scene);
 		stage.show();
 
+		player = new Player(300, 280, 40, 60, "player", 
+		icon = playerRunV;
 	}
 
 
