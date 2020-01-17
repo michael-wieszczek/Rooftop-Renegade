@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 
@@ -31,9 +32,6 @@ public class MainApplication extends Application {
 	Image playerRun = null;
 	Node icon;
 	private Player player = null;
-
-	//Making the Player
-	//	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
 
 	//Starting Platforms
 	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
@@ -54,8 +52,6 @@ public class MainApplication extends Application {
 
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
-
-		root.getChildren().add(player);
 
 
 		AnimationTimer timer = new AnimationTimer() {
@@ -139,12 +135,10 @@ public class MainApplication extends Application {
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
 		try {
-			Image playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
+			playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
 		}catch (FileNotFoundException e) {
 
 		}
-		ImageView playerRunV = new ImageView(playerRun);
-
 		jumpButton = KeyCode.ALT;
 
 		scene.setOnKeyPressed(e -> {
@@ -153,11 +147,12 @@ public class MainApplication extends Application {
 			}
 		});
 
+		player = new Player(300, 280, 40, 60, "player", new ImagePattern(playerRun));
+		root.getChildren().add(player);
 		stage.setScene(scene);
 		stage.show();
 
-		player = new Player(300, 280, 40, 60, "player", 
-				icon = playerRunV;
+		
 	}
 
 

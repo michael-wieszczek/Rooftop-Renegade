@@ -3,6 +3,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 public class Player extends Sprite{
 
@@ -11,8 +12,8 @@ public class Player extends Sprite{
 	
 
 
-	Player(int x, int y, int w, int h, String type, ImageView image) {
-		super(x, y, w, h, type, image);
+	Player(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
+		super(x, y, w, h, type, imagePattern);
 
 			
 		AnimationTimer timer = new AnimationTimer() {
