@@ -23,17 +23,23 @@ import javafx.util.Duration;
  *
  */
 public class MainApplication extends Application {
-
+	AnimationTimer timer;
+	Timeline scorePoints;
+	
 	private Pane root = new Pane();
 
+	//Making the Player
 	private Player player = new Player(300, 280, 40, 60, "player", Color.BLUEVIOLET);
+
+	//Starting Platforms
+
+	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
+	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
+
+
+	//Making Platforms and Coins
 	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	ArrayList<Coins> coins = new ArrayList<Coins>();
-	Platform s = new Platform(0, 340, 800, 5, 340, "platform", Color.BLACK);
-	Platform s2 = new Platform(400, 240, 500, 5, 240, "platform", Color.BLACK);
-	Coins c1 = new Coins(600, 400, 40, 40, "coin", Color.YELLOW);
-	KeyCode jumpButton;
-	//Get intersection with newly generated platforms
 	Platform p;
 	Coins c;
 	int numCoins = 0;
@@ -44,13 +50,14 @@ public class MainApplication extends Application {
 	private int score = 0;
 	public int speed = 7;
 	boolean isDead = false;
+	KeyCode jumpButton;
 
-	private Parent initGame() {
+	public Parent initGame() {
 		root.setPrefSize(800, 600);
 
 		root.getChildren().add(player);
 		
-		Timeline scorePoints = new Timeline(
+		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
 					score++;
 					System.out.println(score); //temp
@@ -60,19 +67,23 @@ public class MainApplication extends Application {
 		scorePoints.play();
 		
 
-		AnimationTimer timer = new AnimationTimer() {
+
+		timer = new AnimationTimer() {
 
 			public void handle(long now) {
-				
-				platform();
 				coins();
+				platform();
+
 				//See's if player is on a platform, and takes gravity into account
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						canJump = true;
-						doubleJump = true;
-						player.antiGravity();
+						if(	player.getBottom() < platforms.get(i).getTop()+10) {
+							player.setY(platforms.get(i).getTop() - player.getHeight());
+							canJump = true;
+							doubleJump = true;
+							player.antiGravity();
+						}							
 					}
 				}
 
@@ -85,9 +96,7 @@ public class MainApplication extends Application {
 					}
 				}
 				player.gravity();
-
 				if(canJump == true) {
-					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE) {
 						if(jump >= 0) {
 							player.jump(jump);
@@ -113,34 +122,45 @@ public class MainApplication extends Application {
 						}
 					}
 				}
-				//Checks to see if player fell below death level
-				if(player.getTranslateY() <= 600) {
-					//timer.stop();
+				if(player.getY() >= 600) {
+					System.out.println("dead");
+					dead(timer);
 				}
-
-
 			}
+			
 		};
 		timer.start();
-
+		
 		platform();
 
 		return root;
 	}
+	
+	public void dead(AnimationTimer timer) {
+		timer.stop();
+		scorePoints.stop();
+	}
 
 	private void platform() {
-		//How and where platforms spawn, and how commonly they appear
-		if((int)(Math.random() * 1000) <= 50) {
-			p = new Platform(800, (int)(Math.random() * 100) + 300, (int)(Math.random() * 500) + 100, 5, 0, "platform", Color.RED);
+		if((int)(Math.random() * 1000) <= 20) {
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
+		if(platforms.isEmpty()) {
+		}
+		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
+				p = new Platform(800, 400, 200, 5, "platform", Color.AQUA);
+				platforms.add(p);
+				root.getChildren().add(p);
+		}
+		
 
 	}
 
 	private void coins() {
-		if((int)(Math.random() * 1000) <= 15) {
-			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
+		if((int)(Math.random() * 1000) <= 8) {
+			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", Color.YELLOW);
 			coins.add(c);
 			root.getChildren().add(c);
 		}
@@ -155,6 +175,8 @@ public class MainApplication extends Application {
 		root.getChildren().addAll(s, s2);
 
 		jumpButton = KeyCode.ALT;
+		
+		
 
 		scene.setOnKeyPressed(e -> {
 			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {

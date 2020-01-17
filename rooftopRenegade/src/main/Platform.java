@@ -10,7 +10,7 @@ public class Platform extends Sprite{
 	private double speed = 7;
 	int top;
 
-	public Platform(int x, int y, int w, int h, int top, String type, Color color) {
+	public Platform(int x, int y, int w, int h, String type, Color color) {
 		super(x, y, w, h, type, color);
 
 		this.top = top;
@@ -22,15 +22,11 @@ public class Platform extends Sprite{
 		);
 		speedValue.setCycleCount(Timeline.INDEFINITE);
 		speedValue.play();
-		
+
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
-				moveLeft(speed);
-				//When platform goes off screen it would despawn
-//				if(getTranslateX() - Platform.this.getWidth() == 0 - Platform.this.getWidth()) {
-//					System.out.println("yeet");
-//				}
+				moveLeft();
 			}
 		};
 
@@ -38,12 +34,11 @@ public class Platform extends Sprite{
 	}
 
 	public int getTop(){
-		return this.top;
+		return (int)getY();
 
 	}
-
-	void moveLeft(double speed) {
-		setTranslateX(getTranslateX() - speed);
+	private void moveLeft() {
+		setX(getX() - 7);
 	}
 
 }
