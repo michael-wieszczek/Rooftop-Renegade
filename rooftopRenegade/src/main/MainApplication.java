@@ -37,32 +37,31 @@ public class MainApplication extends Application {
 	Platform p;
 	Coins c;
 	int numCoins = 0;
-		
+
 	//Jumping 
 	private boolean canJump = true;
 	private int jump = 25;
 	KeyCode jumpButton;
-	
+
 	private Parent initGame() {
 		root.setPrefSize(800, 600);
 
 		root.getChildren().add(player);
-		
+
 
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
-				platform();
 				coins();
+				platform();
+
 				//See's if player is on a platform, and takes gravity into account
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
-						//player.getBottom() > platforms.get(i).getTop()-10 &&
 						if(	player.getBottom() < platforms.get(i).getTop()+10) {
 							player.setY(platforms.get(i).getTop() - player.getHeight());
 							canJump = true;
-							System.out.println(canJump);
 							player.antiGravity();
 						}							
 					}
@@ -73,15 +72,12 @@ public class MainApplication extends Application {
 						root.getChildren().remove(coins.get(i));
 						coins.remove(i);
 						numCoins++;
-						System.out.println(numCoins);
 					}
 				}
 				player.gravity();
 
 
 				if(canJump == true) {
-					System.out.println(jump);
-					//Need to make it when up or space is inputted this will work.
 					if(jumpButton == KeyCode.SPACE)
 						if(jump >= 0) {
 							player.jump(jump);
@@ -106,9 +102,8 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
-		//How and where platforms spawn, and how commonly they appear
-		if((int)(Math.random() * 1000) <= 50) {
-			p = new Platform(800, (int)(Math.random() * 13 + 10) * 20, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
+		if((int)(Math.random() * 1000) <= 45) {
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
@@ -116,8 +111,8 @@ public class MainApplication extends Application {
 	}
 
 	private void coins() {
-		if((int)(Math.random() * 1000) <= 15) {
-			c = new Coins(800, (int)(Math.random() * 500) - 300, 40, 40, "coin", Color.YELLOW);
+		if((int)(Math.random() * 1000) <= 8) {
+			c = new Coins(800, (int)(Math.random() * 10 + 9) * 20, 40, 40, "coin", Color.YELLOW);
 			coins.add(c);
 			root.getChildren().add(c);
 		}
