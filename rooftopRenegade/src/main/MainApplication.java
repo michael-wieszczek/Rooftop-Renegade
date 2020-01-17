@@ -29,7 +29,8 @@ public class MainApplication extends Application {
 
 	private Pane root = new Pane();
 
-	Image playerRun = null;
+	ImagePattern playerRun = null;
+	ImagePattern playerJump = null;
 	Node icon;
 	private Player player = null;
 
@@ -68,6 +69,7 @@ public class MainApplication extends Application {
 							player.setY(platforms.get(i).getTop() - player.getHeight());
 							canJump = true;
 							player.antiGravity();
+							player.setFill(playerRun);
 						}							
 
 					}
@@ -89,6 +91,7 @@ public class MainApplication extends Application {
 						if(jump >= 0) {
 							player.jump(jump);
 							jump--;
+							player.setFill(playerJump);
 						}
 						else {
 							canJump = false;
@@ -135,7 +138,8 @@ public class MainApplication extends Application {
 		platforms.add(s2);
 		root.getChildren().addAll(s, s2);
 		try {
-			playerRun = new Image (new FileInputStream ("Resources/Walking15.gif"));
+			playerRun = new ImagePattern(new Image (new FileInputStream ("Resources/Walking15.gif")));
+			playerJump = new ImagePattern(new Image (new FileInputStream ("Resources/JumpAnimation (1).gif")));
 		}catch (FileNotFoundException e) {
 
 		}
@@ -147,7 +151,7 @@ public class MainApplication extends Application {
 			}
 		});
 
-		player = new Player(300, 280, 40, 60, "player", new ImagePattern(playerRun));
+		player = new Player(300, 280, 40, 60, "player", playerRun);
 		root.getChildren().add(player);
 		stage.setScene(scene);
 		stage.show();
