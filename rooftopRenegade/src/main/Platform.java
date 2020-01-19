@@ -41,7 +41,7 @@ public class Platform extends Sprite{
 
 	}
 	private void moveLeft() {
-		setX(getX() - 7);
+		setX(getX() - 6);
 	}
 
 }
