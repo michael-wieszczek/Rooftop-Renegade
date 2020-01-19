@@ -22,6 +22,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import main.Background;
+import main.Coins;
+import main.Platform;
+import main.Player;
 
 
 /**

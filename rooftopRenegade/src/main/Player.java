@@ -12,7 +12,7 @@ public class Player extends Sprite{
 	
 
 
-	Player(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
+	public Player(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(x, y, w, h, type, imagePattern);
 
 			
