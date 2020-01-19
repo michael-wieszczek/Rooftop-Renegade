@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -155,18 +156,19 @@ public class MainApplication extends Application {
 	public void dead(AnimationTimer timer) {
 		timer.stop();
 		scorePoints.stop();
+		
 	}
 	
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 20) {
-			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.RED);
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 5, "platform", Color.PURPLE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
 		if(platforms.isEmpty()) {
 		}
 		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-				p = new Platform(800, 400, 200, 5, "platform", Color.AQUA);
+				p = new Platform(800, 300, 200, 5, "platform", Color.MEDIUMPURPLE);
 				platforms.add(p);
 				root.getChildren().add(p);
 		}
