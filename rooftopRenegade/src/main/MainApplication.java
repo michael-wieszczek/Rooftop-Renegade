@@ -180,8 +180,6 @@ public class MainApplication extends Application {
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
-
-
 	}
 
 	private void coins() {
@@ -238,8 +236,6 @@ public class MainApplication extends Application {
 		}
 		jumpButton = KeyCode.ALT;
 
-
-
 		scene.setOnKeyPressed(e -> {
 			if(e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP || e.getCode() == KeyCode.SPACE) {
 				jumpButton = KeyCode.SPACE;
@@ -251,14 +247,10 @@ public class MainApplication extends Application {
 		root.getChildren().add(player);
 		stage.setScene(scene);
 		stage.show();
-
-
 	}
-
 
 	public static void main(String[] args) {
 		launch(args);
 
 	}
 }
-
