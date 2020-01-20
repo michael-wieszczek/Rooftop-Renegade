@@ -46,6 +46,7 @@ import javafx.util.Duration;
 public class MainApplication extends Application {
 	AnimationTimer timer;
 	Timeline scorePoints;
+
 	Scene sceneMainMenu, sceneSettings, scene;
 	Stage stage;
 
@@ -62,6 +63,7 @@ public class MainApplication extends Application {
 	private Player player = null;
 
 
+
 	//Starting Platforms
 
 
@@ -76,6 +78,8 @@ public class MainApplication extends Application {
 	private boolean doubleJump = true;
 	private int jump = 26;//Changes the jump height
 	private int score = 0;
+	public static int thicc = 7;
+
 	boolean isDead = false;
 	KeyCode jumpButton;
 
@@ -99,7 +103,9 @@ public class MainApplication extends Application {
 			public void handle(long now) {
 				coins();
 				platform();
+
 				//player.antiGravity();
+
 				//For kurtis to not die, and actually get to the red part :)
 				for(int i = 0; i < platforms.size();i++) {
 
