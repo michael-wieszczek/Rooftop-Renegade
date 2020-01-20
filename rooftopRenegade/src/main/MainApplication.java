@@ -47,8 +47,8 @@ public class MainApplication extends Application {
 
 
 	//Starting Platforms
-	Platform s = new Platform(0, 340, 800, 5,  "platform", Color.BLACK);
-	Platform s2 = new Platform(400, 240, 500, 5, "platform", Color.BLACK);
+	Platform s = new Platform(0, 340, 1200, 5,  "platform", Color.BLACK);
+	Platform s2 = new Platform(900, 240, 500, 5, "platform", Color.BLACK);
 
 	Background background = new Background(0, 0, 3724, 608, "background", backgroundImages[0]);
 
@@ -64,8 +64,6 @@ public class MainApplication extends Application {
 	private boolean doubleJump = true;
 	private int jump = 26;//Changes the jump height
 	private int score = 0;
-	public int speed = 7;
-	public static int thicc = 7;
 	boolean isDead = false;
 	KeyCode jumpButton;
 
@@ -167,14 +165,14 @@ public class MainApplication extends Application {
 
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 20) {
-			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, thicc, "platform", Color.DARKORANGE);
+			p = new Platform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
 		if(platforms.isEmpty()) {
 		}
 		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-			p = new Platform(800, 400, 200, thicc, "platform", Color.AQUA);
+			p = new Platform(800, 400, 200, 7, "platform", Color.AQUA);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}

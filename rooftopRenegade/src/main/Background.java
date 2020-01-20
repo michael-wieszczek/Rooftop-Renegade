@@ -22,7 +22,7 @@ public class Background extends Sprite{
 	}
 
 	private void moveLeft() {
-		setX(getX() - 2);
+		setX(getX() - 1);
 	}
 	
 
