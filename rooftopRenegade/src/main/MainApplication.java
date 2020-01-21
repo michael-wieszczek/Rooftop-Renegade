@@ -58,9 +58,13 @@ public class MainApplication extends Application {
 	Scene sceneMainMenu, sceneSettings, scene, sceneLeaderboard;
 	Stage stage;
 	Group group = new Group();
+	Group leaderboardGroup = new Group();
 	Text scorePrint;
+	Text [] highScoreNames = new Text[5];
+	Text [] highScores = new Text[5];
 	Font font;
 	int index = 0;
+	BorderPane pane3 = new BorderPane();
 
 	private static Pane root = new Pane();
 
@@ -105,7 +109,7 @@ public class MainApplication extends Application {
 					score++;
 					System.out.println(score); //temp
 					scorePrint = new Text(Integer.toString(score));
-					font = new Font("Candara", 45);
+					font = new Font("Candara", 38);
 					scorePrint.setFont(font);
 					scorePrint.setFill(Color.CRIMSON);
 					group.getChildren().add(scorePrint);
@@ -185,8 +189,23 @@ public class MainApplication extends Application {
 
 				}
 				try {
-					scorePrint.setX(player.getX());
+					if (score <10) {
+					scorePrint.setX(player.getX()+10);
 					scorePrint.setY(player.getY()-20);
+					}
+					else if (score >= 10 && score < 100) {
+						scorePrint.setX(player.getX());
+						scorePrint.setY(player.getY()-20);
+					}
+					else if (score >=100  && score < 1000) {
+						scorePrint.setX(player.getX()-10);
+						scorePrint.setY(player.getY()-20);
+					}
+					else{
+						scorePrint.setX(player.getX()-20);
+						scorePrint.setY(player.getY()-20);
+					}
+					
 				}catch(Exception e) {
 				}
 			}
@@ -225,8 +244,26 @@ public class MainApplication extends Application {
 			}
 		}
 		for(int i = 0; i < 5; i++) {
-			System.out.println(leaderboardName.get(i));
-			System.out.println(leaderboardScore.get(i));
+			highScores [i]= new Text(Integer.toString(leaderboardScore.get(i)));
+			highScoreNames [i]= new Text(leaderboardName.get(i));
+			if (i==0) {
+			highScores [i].setX(550);
+			highScores [i].setY(200);
+			highScoreNames [i].setX(170);
+			highScoreNames [i].setY(200);
+			}
+			else {
+				highScores [i].setX(550);
+				highScores [i].setY(200 + 40*i);
+				highScoreNames [i].setX(170);
+				highScoreNames [i].setY(200 + 40*i);
+			}
+			font = new Font("Candara", 38);
+			highScores [i].setFont(font);
+			highScores [i].setFill(Color.BLACK);
+			highScoreNames [i].setFont(font);
+			highScoreNames [i].setFill(Color.BLACK);
+			pane3.getChildren().addAll(highScores [i], highScoreNames[i]);
 		}
 		//save data from current session into file
 		PrintStream fps;
@@ -250,7 +287,6 @@ public class MainApplication extends Application {
 		counter = 0;
 		backgrounds.clear();
 		//Make a button, when pressed runs the code underneath
-		stage.setScene(sceneMainMenu);
 	}
 
 	private void platform() {
@@ -434,8 +470,8 @@ public class MainApplication extends Application {
 		group.getChildren().add(0, root);
 
 		//LEADERBOARD MENU
-		BorderPane pane3 = new BorderPane();
 		pane3.setBackground(background4);
+		
 
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
@@ -469,6 +505,15 @@ public class MainApplication extends Application {
 				scene.setOnKeyPressed(f -> {
 					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
 						jumpButton = KeyCode.SPACE;
+					}
+				});
+				
+				sceneLeaderboard.setOnKeyPressed(f -> {
+					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
+						mainWindow.setScene(sceneMainMenu);
+						for(int i = 0; i < 5; i++) {
+							pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
+							}
 					}
 				});
 				background3.setFill(backgroundImages[0]);
@@ -506,19 +551,6 @@ public class MainApplication extends Application {
 		String scoreSave = name + "SPLIT" + score;
 		return scoreSave;
 	}
-
-
-
-	//DRAWING
-	//		Group root = new Group();
-	//		Canvas canvas = new Canvas(mainWindow.getWidth(),200);
-	//		final GraphicsContext gc = canvas.getGraphicsContext2D();
-	//		
-	//		draw(gc);
-	//		
-	//		root.getChildren().add(canvas);
-
-	//CREATES BUTTONS 
 
 	public static void main(String[] args) {
 		launch(args);
