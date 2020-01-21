@@ -38,10 +38,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -190,8 +188,8 @@ public class MainApplication extends Application {
 				}
 				try {
 					if (score <10) {
-					scorePrint.setX(player.getX()+10);
-					scorePrint.setY(player.getY()-20);
+						scorePrint.setX(player.getX()+10);
+						scorePrint.setY(player.getY()-20);
 					}
 					else if (score >= 10 && score < 100) {
 						scorePrint.setX(player.getX());
@@ -205,7 +203,7 @@ public class MainApplication extends Application {
 						scorePrint.setX(player.getX()-20);
 						scorePrint.setY(player.getY()-20);
 					}
-					
+
 				}catch(Exception e) {
 				}
 			}
@@ -247,10 +245,10 @@ public class MainApplication extends Application {
 			highScores [i]= new Text(Integer.toString(leaderboardScore.get(i)));
 			highScoreNames [i]= new Text(leaderboardName.get(i));
 			if (i==0) {
-			highScores [i].setX(550);
-			highScores [i].setY(200);
-			highScoreNames [i].setX(170);
-			highScoreNames [i].setY(200);
+				highScores [i].setX(550);
+				highScores [i].setY(200);
+				highScoreNames [i].setX(170);
+				highScoreNames [i].setY(200);
 			}
 			else {
 				highScores [i].setX(550);
@@ -472,7 +470,7 @@ public class MainApplication extends Application {
 
 		//LEADERBOARD MENU
 		pane3.setBackground(background4);
-		
+
 
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
@@ -508,13 +506,13 @@ public class MainApplication extends Application {
 						jumpButton = KeyCode.SPACE;
 					}
 				});
-				
+
 				sceneLeaderboard.setOnKeyPressed(f -> {
 					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
 						mainWindow.setScene(sceneMainMenu);
 						for(int i = 0; i < 5; i++) {
 							pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
-							}
+						}
 					}
 				});
 				background3.setFill(backgroundImages[0]);
