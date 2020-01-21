@@ -3,9 +3,13 @@ package main;
  * 
  */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -18,10 +22,8 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -51,8 +53,9 @@ import javafx.util.Duration;
 public class MainApplication extends Application {
 	AnimationTimer timer;
 	Timeline scorePoints;
+	Scanner sc = new Scanner(System.in);
 
-	Scene sceneMainMenu, sceneSettings, scene;
+	Scene sceneMainMenu, sceneSettings, scene, sceneLeaderboard;
 	Stage stage;
 	Group group = new Group();
 	Text scorePrint;
@@ -70,8 +73,9 @@ public class MainApplication extends Application {
 	static ImagePattern [] backgroundImages  = new ImagePattern [3];
 	Node icon;
 	private Player player = null;
-
-
+	ArrayList<Integer> leaderboardScore = new ArrayList<Integer>();
+	ArrayList <String> leaderboardName = new ArrayList<String>();
+	File file = new File("Resources/LeaderBoard.txt");
 
 	//Starting Platforms
 
@@ -87,8 +91,6 @@ public class MainApplication extends Application {
 	private boolean doubleJump = true;
 	private int jump = 26;//Changes the jump height
 	private int score = 0;
-	public static int thicc = 7;
-
 	boolean isDead = false;
 	KeyCode jumpButton;
 
@@ -183,13 +185,12 @@ public class MainApplication extends Application {
 
 				}
 				try {
-				scorePrint.setX(player.getX());
-				scorePrint.setY(player.getY()-20);
+					scorePrint.setX(player.getX());
+					scorePrint.setY(player.getY()-20);
 				}catch(Exception e) {
-					
 				}
 			}
-			
+
 
 		};
 		timer.start();
@@ -200,8 +201,45 @@ public class MainApplication extends Application {
 	}
 
 	public void dead(AnimationTimer timer) {
+		int leaderboardPos = linear(leaderboardScore, score);
 		timer.stop();
 		scorePoints.stop();
+		stage.setScene(sceneLeaderboard);
+		//Display Number of Coins
+		if(leaderboardPos == -1) {
+		}
+		else if (leaderboardPos > 4){
+		}
+		else {
+			leaderboardScore.add(leaderboardPos, score);
+			System.out.println("New Highscore! Please enter a 4 character name");
+			for(int i = 0; i < 1;) {
+				String name = sc.nextLine();
+				if(name.length() > 4 || name.length() < 4) {
+					System.out.println("Please Enter a valid name");
+				}
+				else {
+					i++;
+					leaderboardName.add(leaderboardPos, name);
+				}
+			}
+		}
+		for(int i = 0; i < 5; i++) {
+			System.out.println(leaderboardName.get(i));
+			System.out.println(leaderboardScore.get(i));
+		}
+		//save data from current session into file
+		PrintStream fps;
+		try {
+			fps = new PrintStream(file);
+			for(int j = 0; j < 5; j++) {
+				fps.println(toString(leaderboardName.get(j),leaderboardScore.get(j)));
+			}
+			fps.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Leaderboards and score here
 		numCoins = 0;
 		canJump = true;
@@ -211,6 +249,7 @@ public class MainApplication extends Application {
 		isDead = false;
 		counter = 0;
 		backgrounds.clear();
+		//Make a button, when pressed runs the code underneath
 		stage.setScene(sceneMainMenu);
 	}
 
@@ -271,6 +310,23 @@ public class MainApplication extends Application {
 	public void start (Stage mainWindow) throws Exception {
 		stage = mainWindow;
 
+		//load data from file
+		try {
+			Scanner fscan = new Scanner(file);
+			for(int i = 0; i < 5; i++) {
+				String[] arr = fscan.nextLine().split("SPLIT");
+				leaderboardName.add(arr[0]);
+				leaderboardScore.add(Integer.parseInt(arr[1]));
+			}	
+			fscan.close();
+		}
+		catch (FileNotFoundException e) {
+			System.err.print("Could not find file");
+		}	
+		catch (NoSuchElementException e) {
+			System.err.print("File is empty");
+		}
+
 		Button game = new Button();	
 		game.setStyle("-fx-background-image: url('main/startaButton.png')");
 		game.setMinSize(190,49);
@@ -324,7 +380,7 @@ public class MainApplication extends Application {
 			e2.printStackTrace();
 		}
 		//Sets size of background area
-		BackgroundSize backSize = new BackgroundSize(800, 500, false, false, false, false);
+		BackgroundSize backSize = new BackgroundSize(820, 520, false, false, false, false);
 		//Creates the background image
 		BackgroundImage backImage= new BackgroundImage(image1, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT,
@@ -349,6 +405,23 @@ public class MainApplication extends Application {
 				backSize2);
 		Background background2 = new Background(backImage2);
 
+		//LEADERBOARD BACKGROUND
+		Image image3 = null;
+		try {
+			image3 = new Image (new FileInputStream ("Resources/LeaderboardBackground.png"));
+		} catch (FileNotFoundException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		//Sets size of background area
+		BackgroundSize backSize3 = new BackgroundSize(800, 600, false, false, false, false);
+		//Creates the background image
+		BackgroundImage backImage3= new BackgroundImage(image3, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,
+				backSize3);
+		Background background4 = new Background(backImage3);
+
 		//CREATES MENU
 		BorderPane pane = new BorderPane();
 		pane.setCenter(menu);
@@ -357,13 +430,17 @@ public class MainApplication extends Application {
 		//CREATES SETTINGS
 		BorderPane pane2 = new BorderPane();
 		pane2.setBackground(background2);
-		
+
 		group.getChildren().add(0, root);
-		
-		
+
+		//LEADERBOARD MENU
+		BorderPane pane3 = new BorderPane();
+		pane3.setBackground(background4);
+
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
 		scene = new Scene(group,800,500);
+		sceneLeaderboard = new Scene(pane3,800,500);
 
 		//Changes scene on button cick
 		game.setOnAction(e -> {
@@ -416,7 +493,19 @@ public class MainApplication extends Application {
 		mainWindow.show();
 	}
 
+	public static int linear(ArrayList<Integer> arr, int target) {
+		for(int i = 0; i < arr.size(); i++) {
+			if(target > arr.get(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
+	private String toString(String name, int score) {
+		String scoreSave = name + "SPLIT" + score;
+		return scoreSave;
+	}
 
 
 
