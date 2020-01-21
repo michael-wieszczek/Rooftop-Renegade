@@ -7,7 +7,6 @@ public class GameBackground extends Sprite{
 	public GameBackground(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(x, y, w, h, type, imagePattern);
 
-		this.xSpeed = 1;
 
 		AnimationTimer timer = new AnimationTimer() {
 
