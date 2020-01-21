@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
 /**
- * Platform.java
+ * GamePlatform.java<br>
  * This class extends the sprite class, and is used to create platform objects for the game.
  * This class takes care of the platforms in the game, making sure they are always moving to the left,
  * as well as returning the top edge of the object to be used for walking and jumping in the game.<br><br>

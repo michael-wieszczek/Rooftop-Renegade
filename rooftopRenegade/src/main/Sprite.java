@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 /**
- * Sprite.java
+ * Sprite.java<br>
  * This class extends the Rectangle Class. This class is used for a generic moving object. 
  * This class takes care of the x and y location (should be the top left corner of the object),
  * the fill of the object shape, as well as the Type of sprite. Although the Type of sprite is not

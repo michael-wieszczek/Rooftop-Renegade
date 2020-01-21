@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.paint.ImagePattern;
 
 /**
- * Coins.java
+ * Coins.java<br>
  * This class extends the sprite class, and is used to create coin objects for the game.
  * This class makes sure that all coin objects are constantly moving from the right side of the screen
  * to the left.<br><br>
@@ -30,7 +30,7 @@ public class Coins extends Sprite{
 	 * Initial type of sprite, used for super class. Currently not being used in program, but useful 
 	 * for further development of the game.
 	 * @param imagePattern
-	 * Sets an imagePattern as the fill for the player object shape.
+	 * Sets an imagePattern as the fill for the Coin object shape.
 	 */
 	Coins(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(x, y, w, h, type, imagePattern);
