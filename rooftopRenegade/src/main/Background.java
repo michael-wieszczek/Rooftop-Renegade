@@ -1,7 +1,6 @@
 package main;
 
 import javafx.animation.AnimationTimer;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
 public class Background extends Sprite{
