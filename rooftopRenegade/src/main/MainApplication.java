@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,6 +36,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -49,6 +54,10 @@ public class MainApplication extends Application {
 
 	Scene sceneMainMenu, sceneSettings, scene;
 	Stage stage;
+	Group group = new Group();
+	Text scorePrint;
+	Font font;
+	int index = 0;
 
 	private static Pane root = new Pane();
 
@@ -90,8 +99,14 @@ public class MainApplication extends Application {
 
 		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
+					group.getChildren().remove(scorePrint);
 					score++;
 					System.out.println(score); //temp
+					scorePrint = new Text(Integer.toString(score));
+					font = new Font("Candara", 45);
+					scorePrint.setFont(font);
+					scorePrint.setFill(Color.CRIMSON);
+					group.getChildren().add(scorePrint);
 				})
 				);
 		scorePoints.setCycleCount(Timeline.INDEFINITE);
@@ -117,8 +132,6 @@ public class MainApplication extends Application {
 							player.antiGravity();
 							player.setFill(playerRun);
 						}							
-
-
 					}
 				}
 
@@ -167,10 +180,16 @@ public class MainApplication extends Application {
 						background();
 					}
 				}catch(Exception e) {
+
+				}
+				try {
+				scorePrint.setX(player.getX());
+				scorePrint.setY(player.getY()-20);
+				}catch(Exception e) {
 					
 				}
-
 			}
+			
 
 		};
 		timer.start();
@@ -196,7 +215,7 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
-		if((int)(Math.random() * 1000) <= 20) {
+		if((int)(Math.random() * 1000) <= 15) {
 			p = new GamePlatform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
@@ -204,7 +223,7 @@ public class MainApplication extends Application {
 		if(platforms.isEmpty()) {
 		}
 		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-			p = new GamePlatform(800, 400, 200, 7, "platform", Color.AQUA);
+			p = new GamePlatform(800, 400, (int)(Math.random() * 300) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
@@ -338,13 +357,13 @@ public class MainApplication extends Application {
 		//CREATES SETTINGS
 		BorderPane pane2 = new BorderPane();
 		pane2.setBackground(background2);
-
-		//CREATE GAME SCREEN
-		BorderPane pane3 = new BorderPane();
-
+		
+		group.getChildren().add(0, root);
+		
+		
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
-		scene = new Scene(root,800,500);
+		scene = new Scene(group,800,500);
 
 		//Changes scene on button cick
 		game.setOnAction(e -> {
@@ -386,6 +405,7 @@ public class MainApplication extends Application {
 				e1.printStackTrace();
 			}
 		});
+
 		settings.setOnAction(e -> mainWindow.setScene(sceneSettings));
 		exit.setOnAction(e ->Platform.exit());
 
