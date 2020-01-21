@@ -1,16 +1,13 @@
 package main;
-/**
- * 
- */
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -36,6 +33,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
@@ -44,8 +43,30 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * @author mimlo
- *
+ * MainApplication.java <br>
+ * This class extends application, and is what runs the game. It calls launch which starts
+ * the game. On start, the user is presented with a menu with 3 interactive buttons,
+ * these buttons can be used to start the game, check the settings, or exit. Upon pressing
+ * one of these buttons the corresponding piece of code will play. <br>
+ * 
+ * Game: <br>
+ * which starts the game, starts spawning randomly generated platforms using the Platform class which the
+ * player has to jump on to survive and accumulate points, during this time the player can
+ * collect coins spawned in from the Coins class to receive extra points. When the player
+ * reaches the lower bounds of the screen, he will be dead. The players score is then checked
+ * ,and if within the top 5 scores, will be prompted to enter a name and be shown on the 
+ * leaderboard screen, from this, the player can either play the game again or go back to 
+ * the main menu. <br> <br>
+ * 
+ * Settings: <br>
+ * This shows the settings scene, which provides the controls for the game, as well as 
+ * the option to mute the music, if the back button is clicked, the player will go back
+ * to the main menu <br><br>
+ * 
+ * Exit: <br>
+ * This will call system.exit to exit the application <br>
+ * @author Michael Wieszczek <br>
+ * January 21st, 2020
  */
 public class MainApplication extends Application {
 	AnimationTimer timer;
@@ -82,7 +103,9 @@ public class MainApplication extends Application {
 	ArrayList <String> leaderboardName = new ArrayList<String>();
 	File file = new File("Resources/LeaderBoard.txt");
 
-	//Starting Platforms
+	File song = new File ("Resources/TimeMachineSong.wav");
+	int isMuted = 1;
+	MediaPlayer music;
 
 
 	//Making Platforms and Coins
@@ -91,6 +114,7 @@ public class MainApplication extends Application {
 	ArrayList<Coins> coins = new ArrayList<Coins>();
 	GamePlatform p;
 	Coins c;
+
 	int numCoins = 0;
 	private boolean canJump = true;
 	private boolean doubleJump = true;
@@ -99,16 +123,25 @@ public class MainApplication extends Application {
 	boolean isDead = false;
 	KeyCode jumpButton;
 
-	GamePlatform s = new GamePlatform(0, 340, 800, 5,  "platform", Color.BLACK);
-	GamePlatform s2 = new GamePlatform(400, 240, 500, 5, "platform", Color.BLACK);
-
 	public Parent initGame() {
+		if(isMuted == 1) {
+			Media sound=null;
+			try {
+				sound = new Media (song.toURI().toURL().toString());
+			}
+			catch (MalformedURLException g) {
+				g.printStackTrace();
+			}
+			music = new MediaPlayer(sound);
+			music.setVolume(.1);
+			music.setCycleCount(music.INDEFINITE);
+			music.play();
+		}
 
 		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
 					group.getChildren().remove(scorePrint);
 					score++;
-					System.out.println(score); //temp
 					scorePrint = new Text(Integer.toString(score));
 					font = new Font("Candara", 38);
 					scorePrint.setFont(font);
@@ -127,8 +160,8 @@ public class MainApplication extends Application {
 				platform();
 
 				//player.antiGravity();
-
 				//For kurtis to not die, and actually get to the red part :)
+
 				for(int i = 0; i < platforms.size();i++) {
 
 					if(player.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())) {
@@ -179,6 +212,9 @@ public class MainApplication extends Application {
 					}
 				}
 				if(player.getY() >= 600) {
+					if(isMuted == 1) {
+						music.stop();
+					}
 					dead(timer);
 				}
 				try {
@@ -218,7 +254,16 @@ public class MainApplication extends Application {
 
 		return root;
 	}
-
+	/**
+	 * This method runs after the player reaches the lower bound of the screen, this
+	 * method checks the players current score, and compares it to the current scores
+	 * saved in the leaderboard. If the player score is within the top 5, the player 
+	 * will be prompted to enter a 4 character name and their score will be saved on 
+	 * the leaderboard, This method will also reset all key variables so that they are
+	 * ready to be used again. The user will have 2 buttons in which they can either
+	 * choose to restart the game, or go back to the main menu.
+	 * @param timer - The timer that keeps track of score
+	 */
 	public void dead(AnimationTimer timer) {
 		for(int i = 0; i < 5; i++) {
 			pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
@@ -227,7 +272,6 @@ public class MainApplication extends Application {
 		timer.stop();
 		scorePoints.stop();
 		stage.setScene(sceneLeaderboard);
-		//Display Number of Coins
 		if(leaderboardPos == -1) {
 		}
 		else if (leaderboardPos > 4){
@@ -278,21 +322,25 @@ public class MainApplication extends Application {
 			fps.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Error Saving To File");
 		}
-		//Leaderboards and score here
+
 		numCoins = 0;
 		canJump = true;
 		doubleJump = true;
-		jump = 26;//Changes the jump height
+		jump = 26;
 		score = 0;
 		isDead = false;
 		counter = 0;
 		group.getChildren().remove(scorePrint);
 		backgrounds.clear();
-		//Make a button, when pressed runs the code underneath
 	}
-
+	/**
+	 * Has a 15 in 1000 chance to spawn a randomly generated platform each time this
+	 * method is called. The platform will have a random y and width value and will be
+	 * added to the root. If the last spawned platform starts reaching the left side of the
+	 * screen, a safety platform will be spawned, to ensure that the jump will be possible
+	 */
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 15) {
 			p = new GamePlatform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
@@ -307,7 +355,10 @@ public class MainApplication extends Application {
 			root.getChildren().add(p);
 		}
 	}
-
+	/**
+	 * This method will have a 12 in 1000 chance of spawning a coin into the game with
+	 * a randomly generated y value.
+	 */
 	private void coins() {
 		try {
 			coin = new ImagePattern(new Image (new FileInputStream ("Resources/Coin 10FPS.gif")));
@@ -322,7 +373,9 @@ public class MainApplication extends Application {
 		}
 
 	}
-
+	/**
+	 * This method sets a specific background depending on the value of counter. 
+	 */
 	public static void background() {
 		counter++;
 		if(counter == 1) {
@@ -344,7 +397,9 @@ public class MainApplication extends Application {
 			root.getChildren().add(0, b);
 		}
 	}
-
+	/**
+	 * This method sets up all the scenes and buttons in the application
+	 */
 	public void start (Stage mainWindow) throws Exception {
 		//Sets the stage equal to the mainWindow
 		stage = mainWindow;
@@ -564,14 +619,19 @@ public class MainApplication extends Application {
 		//Changes scene on button click to the game scene
 		game.setOnAction(e -> {
 			try {
-				GamePlatform s = new GamePlatform(0, 340, 800, 5,  "platform", Color.BLACK);
-				GamePlatform s2 = new GamePlatform(400, 240, 500, 5, "platform", Color.BLACK);
+				//The initial setpiece when starting the game, two platforms designed for the user to
+				//prepare, and be able to test out the basic moment of the game before they reach
+				//the randomly generated part
+				GamePlatform initialPlat1 = new GamePlatform(0, 340, 1000, 7,  "platform", Color.DARKORANGE);
+				GamePlatform initialPlat2 = new GamePlatform(700, 240, 500, 7, "platform", Color.DARKORANGE);
+
+				//Starts game
 				initGame();
 				GameBackground background3 = new GameBackground(0, 0, 3724, 608, "background", backgroundImages[0]);
 				root.getChildren().add(background3);
-				platforms.add(s);
-				platforms.add(s2);
-				root.getChildren().addAll(s, s2);
+				platforms.add(initialPlat1);
+				platforms.add(initialPlat2);
+				root.getChildren().addAll(initialPlat1, initialPlat2);
 				try {
 					playerRun = new ImagePattern(new Image (new FileInputStream ("Resources/Walking15.gif")));
 					playerJump = new ImagePattern(new Image (new FileInputStream ("Resources/JumpAnimation (1).gif")));
@@ -615,6 +675,7 @@ public class MainApplication extends Application {
 
 		//Changes scene on button click (does back to main menu
 		back.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
+		mute.setOnAction(e -> isMuted *= -1);
 		back2.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
 
 		mainWindow.setTitle("Rooftop Renegade");
@@ -622,7 +683,13 @@ public class MainApplication extends Application {
 		mainWindow.setScene(sceneMainMenu);
 		mainWindow.show();
 	}
-
+	/**
+	 * This method searches through an array list to find the spot where the target score
+	 * would be placed into, if target is smaller than everything in the array, -1 is returned
+	 * @param arr - The leaderboard array list containing scores.
+	 * @param target - The players current score
+	 * @return
+	 */
 	public static int linear(ArrayList<Integer> arr, int target) {
 		for(int i = 0; i < arr.size(); i++) {
 			if(target > arr.get(i)) {
@@ -631,12 +698,21 @@ public class MainApplication extends Application {
 		}
 		return -1;
 	}
-
+	/**
+	 * This method takes the given name of a leaderboard player, and a given score of that
+	 * player, and converts it into a single string, separated by "SPLIT"
+	 * @param name - The players name
+	 * @param score - The players score
+	 * @return scoreSave - The singular string containing the name and score seperated by SPLIT
+	 */
 	private String toString(String name, int score) {
 		String scoreSave = name + "SPLIT" + score;
 		return scoreSave;
 	}
-
+	/**
+	 * Launches the application
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 
