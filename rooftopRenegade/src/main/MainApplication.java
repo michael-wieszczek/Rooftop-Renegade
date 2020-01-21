@@ -179,7 +179,6 @@ public class MainApplication extends Application {
 					}
 				}
 				if(player.getY() >= 600) {
-					System.out.println("dead");
 					dead(timer);
 				}
 				try {
