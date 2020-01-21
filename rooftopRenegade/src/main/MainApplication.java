@@ -3,9 +3,13 @@ package main;
  * 
  */
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
@@ -21,8 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -39,6 +43,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 //import main.Background;
@@ -53,12 +61,21 @@ import main.Player;
 public class MainApplication extends Application {
 	AnimationTimer timer;
 	Timeline scorePoints;
+	Scanner sc = new Scanner(System.in);
 
-	Scene sceneMainMenu, sceneSettings, scene;
+	Scene sceneMainMenu, sceneSettings, scene, sceneLeaderboard;
 	Stage stage;
 	Text settingText;
 	
 	//Group groupSetting = new Group();
+	Group group = new Group();
+	Group leaderboardGroup = new Group();
+	Text scorePrint;
+	Text [] highScoreNames = new Text[5];
+	Text [] highScores = new Text[5];
+	Font font;
+	int index = 0;
+	BorderPane pane3 = new BorderPane();
 
 	private static Pane root = new Pane();
 
@@ -70,7 +87,11 @@ public class MainApplication extends Application {
 
 	static ImagePattern [] backgroundImages  = new ImagePattern [3];
 	Node icon;
+	
 	private Player player = null;
+	ArrayList<Integer> leaderboardScore = new ArrayList<Integer>();
+	ArrayList <String> leaderboardName = new ArrayList<String>();
+	File file = new File("Resources/LeaderBoard.txt");
 
 	//Starting Platforms
 	
@@ -86,8 +107,6 @@ public class MainApplication extends Application {
 	private boolean doubleJump = true;
 	private int jump = 26;//Changes the jump height
 	private int score = 0;
-	public static int thicc = 7;
-
 	boolean isDead = false;
 	KeyCode jumpButton;
 
@@ -98,8 +117,14 @@ public class MainApplication extends Application {
 
 		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
+					group.getChildren().remove(scorePrint);
 					score++;
 					System.out.println(score); //temp
+					scorePrint = new Text(Integer.toString(score));
+					font = new Font("Candara", 38);
+					scorePrint.setFont(font);
+					scorePrint.setFill(Color.CRIMSON);
+					group.getChildren().add(scorePrint);
 				})
 				);
 		scorePoints.setCycleCount(Timeline.INDEFINITE);
@@ -125,8 +150,6 @@ public class MainApplication extends Application {
 							player.antiGravity();
 							player.setFill(playerRun);
 						}							
-
-
 					}
 				}
 
@@ -175,10 +198,30 @@ public class MainApplication extends Application {
 						background();
 					}
 				}catch(Exception e) {
-					
-				}
 
+				}
+				try {
+					if (score <10) {
+					scorePrint.setX(player.getX()+10);
+					scorePrint.setY(player.getY()-20);
+					}
+					else if (score >= 10 && score < 100) {
+						scorePrint.setX(player.getX());
+						scorePrint.setY(player.getY()-20);
+					}
+					else if (score >=100  && score < 1000) {
+						scorePrint.setX(player.getX()-10);
+						scorePrint.setY(player.getY()-20);
+					}
+					else{
+						scorePrint.setX(player.getX()-20);
+						scorePrint.setY(player.getY()-20);
+					}
+					
+				}catch(Exception e) {
+				}
 			}
+
 
 		};
 		timer.start();
@@ -189,8 +232,63 @@ public class MainApplication extends Application {
 	}
 
 	public void dead(AnimationTimer timer) {
+		int leaderboardPos = linear(leaderboardScore, score);
 		timer.stop();
 		scorePoints.stop();
+		stage.setScene(sceneLeaderboard);
+		//Display Number of Coins
+		if(leaderboardPos == -1) {
+		}
+		else if (leaderboardPos > 4){
+		}
+		else {
+			leaderboardScore.add(leaderboardPos, score);
+			System.out.println("New Highscore! Please enter a 4 character name");
+			for(int i = 0; i < 1;) {
+				String name = sc.nextLine();
+				if(name.length() > 4 || name.length() < 4) {
+					System.out.println("Please Enter a valid name");
+				}
+				else {
+					i++;
+					leaderboardName.add(leaderboardPos, name);
+				}
+			}
+		}
+		for(int i = 0; i < 5; i++) {
+			highScores [i]= new Text(Integer.toString(leaderboardScore.get(i)));
+			highScoreNames [i]= new Text(leaderboardName.get(i));
+			if (i==0) {
+			highScores [i].setX(550);
+			highScores [i].setY(200);
+			highScoreNames [i].setX(170);
+			highScoreNames [i].setY(200);
+			}
+			else {
+				highScores [i].setX(550);
+				highScores [i].setY(200 + 40*i);
+				highScoreNames [i].setX(170);
+				highScoreNames [i].setY(200 + 40*i);
+			}
+			font = new Font("Candara", 38);
+			highScores [i].setFont(font);
+			highScores [i].setFill(Color.BLACK);
+			highScoreNames [i].setFont(font);
+			highScoreNames [i].setFill(Color.BLACK);
+			pane3.getChildren().addAll(highScores [i], highScoreNames[i]);
+		}
+		//save data from current session into file
+		PrintStream fps;
+		try {
+			fps = new PrintStream(file);
+			for(int j = 0; j < 5; j++) {
+				fps.println(toString(leaderboardName.get(j),leaderboardScore.get(j)));
+			}
+			fps.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Leaderboards and score here
 		numCoins = 0;
 		canJump = true;
@@ -199,12 +297,13 @@ public class MainApplication extends Application {
 		score = 0;
 		isDead = false;
 		counter = 0;
+		group.getChildren().remove(scorePrint);
 		backgrounds.clear();
-		stage.setScene(sceneMainMenu);
+		//Make a button, when pressed runs the code underneath
 	}
 
 	private void platform() {
-		if((int)(Math.random() * 1000) <= 20) {
+		if((int)(Math.random() * 1000) <= 15) {
 			p = new GamePlatform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
@@ -212,7 +311,7 @@ public class MainApplication extends Application {
 		if(platforms.isEmpty()) {
 		}
 		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-			p = new GamePlatform(800, 400, 200, 7, "platform", Color.AQUA);
+			p = new GamePlatform(800, 400, (int)(Math.random() * 300) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
@@ -258,9 +357,26 @@ public class MainApplication extends Application {
 	public void start (Stage mainWindow) throws Exception {
 		//Sets the stage equal to the mainWindow
 		stage = mainWindow;
+		
+		//load data from file
+		try {
+			Scanner fscan = new Scanner(file);
+			for(int i = 0; i < 5; i++) {
+				String[] arr = fscan.nextLine().split("SPLIT");
+				leaderboardName.add(arr[0]);
+				leaderboardScore.add(Integer.parseInt(arr[1]));
+			}	
+			fscan.close();
+		}
+		catch (FileNotFoundException e) {
+			System.err.print("Could not find file");
+		}	
+		catch (NoSuchElementException e) {
+			System.err.print("File is empty");
+		}
 
 		//CREATES BUTTONS FOR THE MAIN MENU
-		
+
 		//Start button
 		Button game = new Button();	
 		game.setStyle("-fx-background-image: url('main/startaButton.png')");
@@ -319,15 +435,13 @@ public class MainApplication extends Application {
 			e2.printStackTrace();
 		}
 		//Sets size of background area
-		BackgroundSize backSize = new BackgroundSize(800, 500, false, false, false, false);
+		BackgroundSize backSize = new BackgroundSize(820, 520, false, false, false, false);
 		//Creates the background image
 		BackgroundImage backImage= new BackgroundImage(image1, BackgroundRepeat.NO_REPEAT,
 				BackgroundRepeat.NO_REPEAT,
 				BackgroundPosition.DEFAULT,
 				backSize);
 		Background background = new Background(backImage);
-
-		
 
 		//CREATES MENU
 		
@@ -396,6 +510,24 @@ public class MainApplication extends Application {
 		settingGrid.getRowConstraints().addAll(rowSettings);
 			
 		//Adds grid pane to boarder pane
+
+		//LEADERBOARD BACKGROUND
+		Image image3 = null;
+		try {
+			image3 = new Image (new FileInputStream ("Resources/LeaderboardBackground.png"));
+		} catch (FileNotFoundException e3) {
+			e3.printStackTrace();
+		}
+		//Sets size of background area
+		BackgroundSize backSize3 = new BackgroundSize(800, 600, false, false, false, false);
+		//Creates the background image
+		BackgroundImage backImage3= new BackgroundImage(image3, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,
+				backSize3);
+		Background background4 = new Background(backImage3);
+
+		//CREATES SETTINGS
 		BorderPane pane2 = new BorderPane();
 		pane2.setBackground(background2);
 		pane2.setCenter(settingGrid);
@@ -404,12 +536,41 @@ public class MainApplication extends Application {
 		
 		BorderPane pane3 = new BorderPane();
 		
+		pane2.setBackground(background2);
+
+		group.getChildren().add(0, root);
+
+		//LEADERBOARD BUTTONS
+		//Back button
+		GridPane leaderboardGrid = new GridPane();
+		Button back2 = new Button();	
+		back2.setStyle("-fx-background-image: url('main/backButton.png')");
+		back2.setMinSize(190,49);
+		leaderboardGrid.add(back2,0,0);
+
+		
+		GridPane.setHalignment(back2,HPos.CENTER);
+		GridPane.setValignment(back2,VPos.BOTTOM);
+		ColumnConstraints columnLeaderboard = new ColumnConstraints();
+		columnLeaderboard.setPercentWidth(100);
+		columnLeaderboard.setHgrow(Priority.ALWAYS);
+		leaderboardGrid.getColumnConstraints().addAll(columnLeaderboard);
+		
+		RowConstraints rowLeaderboard = new RowConstraints();
+		rowLeaderboard.setPercentHeight(100);
+		leaderboardGrid.getRowConstraints().addAll(rowLeaderboard);
+		
+		//LEADERBOARD MENU
+		pane3.setBackground(background4);
+		pane3.setCenter(leaderboardGrid);
+		
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
-		scene = new Scene(root,800,500);
+		scene = new Scene(group,800,500);
+		sceneLeaderboard = new Scene(pane3,800,500);
 
 		//BUTTON CLICK COMMANDS
-
+ 
 		//Changes scene on button click to the game scene
 		game.setOnAction(e -> {
 			try {
@@ -438,6 +599,15 @@ public class MainApplication extends Application {
 						jumpButton = KeyCode.SPACE;
 					}
 				});
+				
+				sceneLeaderboard.setOnKeyPressed(f -> {
+					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
+						mainWindow.setScene(sceneMainMenu);
+						for(int i = 0; i < 5; i++) {
+							pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
+							}
+					}
+				});
 				background3.setFill(backgroundImages[0]);
 				backgrounds.add(background3);
 				player = new Player(300, 280, 40, 60, "player", playerRun);
@@ -450,6 +620,7 @@ public class MainApplication extends Application {
 
 		});
 		//Changes scene on button click to the settings window
+
 		settings.setOnAction(e -> mainWindow.setScene(sceneSettings));
 		
 		//Changes scene on button click (exits game)
@@ -457,6 +628,7 @@ public class MainApplication extends Application {
 		
 		//Changes scene on button click (does back to main menu
 		back.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
+		back2.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
 
 		mainWindow.setTitle("Rooftop Renegade");
 		mainWindow.setResizable(false);	
@@ -464,6 +636,19 @@ public class MainApplication extends Application {
 		mainWindow.show();
 	}
 
+	public static int linear(ArrayList<Integer> arr, int target) {
+		for(int i = 0; i < arr.size(); i++) {
+			if(target > arr.get(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private String toString(String name, int score) {
+		String scoreSave = name + "SPLIT" + score;
+		return scoreSave;
+	}
 
 	public static void main(String[] args) {
 		launch(args);
