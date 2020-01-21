@@ -522,7 +522,6 @@ public class MainApplication extends Application {
 
 		//CREATE GAME SCREEN
 
-		BorderPane pane3 = new BorderPane();
 
 		pane2.setBackground(background2);
 
