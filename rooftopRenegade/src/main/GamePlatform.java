@@ -18,10 +18,10 @@ public class GamePlatform extends Sprite{
 		this.top = top;
 		Timeline speedValue = new Timeline(
 				new KeyFrame(Duration.seconds(5), e -> {
-//					speed += 7;
-//					System.out.println(speed); //temp
+					//					speed += 7;
+					//					System.out.println(speed); //temp
 				})
-		);
+				);
 		speedValue.setCycleCount(Timeline.INDEFINITE);
 		speedValue.play();
 

@@ -169,7 +169,7 @@ public class MainApplication extends Application {
 						background();
 					}
 				}catch(Exception e) {
-					
+
 				}
 
 			}
