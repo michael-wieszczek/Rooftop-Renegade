@@ -18,6 +18,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -37,6 +38,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -52,6 +57,10 @@ public class MainApplication extends Application {
 
 	Scene sceneMainMenu, sceneSettings, scene, sceneLeaderboard;
 	Stage stage;
+	Group group = new Group();
+	Text scorePrint;
+	Font font;
+	int index = 0;
 
 	private static Pane root = new Pane();
 
@@ -92,8 +101,14 @@ public class MainApplication extends Application {
 
 		scorePoints = new Timeline(
 				new KeyFrame(Duration.millis(400), e -> {
+					group.getChildren().remove(scorePrint);
 					score++;
 					System.out.println(score); //temp
+					scorePrint = new Text(Integer.toString(score));
+					font = new Font("Candara", 45);
+					scorePrint.setFont(font);
+					scorePrint.setFill(Color.CRIMSON);
+					group.getChildren().add(scorePrint);
 				})
 				);
 		scorePoints.setCycleCount(Timeline.INDEFINITE);
@@ -119,8 +134,6 @@ public class MainApplication extends Application {
 							player.antiGravity();
 							player.setFill(playerRun);
 						}							
-
-
 					}
 				}
 
@@ -171,8 +184,13 @@ public class MainApplication extends Application {
 				}catch(Exception e) {
 
 				}
-
+				try {
+					scorePrint.setX(player.getX());
+					scorePrint.setY(player.getY()-20);
+				}catch(Exception e) {
+				}
 			}
+
 
 		};
 		timer.start();
@@ -196,14 +214,14 @@ public class MainApplication extends Application {
 			leaderboardScore.add(leaderboardPos, score);
 			System.out.println("New Highscore! Please enter a 4 character name");
 			for(int i = 0; i < 1;) {
-			String name = sc.nextLine();
-			if(name.length() > 4 || name.length() < 4) {
-				System.out.println("Please Enter a valid name");
-			}
-			else {
-				i++;
-				leaderboardName.add(leaderboardPos, name);
-			}
+				String name = sc.nextLine();
+				if(name.length() > 4 || name.length() < 4) {
+					System.out.println("Please Enter a valid name");
+				}
+				else {
+					i++;
+					leaderboardName.add(leaderboardPos, name);
+				}
 			}
 		}
 		for(int i = 0; i < 5; i++) {
@@ -236,7 +254,7 @@ public class MainApplication extends Application {
 	}
 
 	private void platform() {
-		if((int)(Math.random() * 1000) <= 20) {
+		if((int)(Math.random() * 1000) <= 15) {
 			p = new GamePlatform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
@@ -244,7 +262,7 @@ public class MainApplication extends Application {
 		if(platforms.isEmpty()) {
 		}
 		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-			p = new GamePlatform(800, 400, 200, 7, "platform", Color.AQUA);
+			p = new GamePlatform(800, 400, (int)(Math.random() * 300) + 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
@@ -291,7 +309,7 @@ public class MainApplication extends Application {
 
 	public void start (Stage mainWindow) throws Exception {
 		stage = mainWindow;
-		
+
 		//load data from file
 		try {
 			Scanner fscan = new Scanner(file);
@@ -386,23 +404,23 @@ public class MainApplication extends Application {
 				BackgroundPosition.DEFAULT,
 				backSize2);
 		Background background2 = new Background(backImage2);
-		
+
 		//LEADERBOARD BACKGROUND
-				Image image3 = null;
-				try {
-					image3 = new Image (new FileInputStream ("Resources/LeaderboardBackground.png"));
-				} catch (FileNotFoundException e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				}
-				//Sets size of background area
-				BackgroundSize backSize3 = new BackgroundSize(800, 600, false, false, false, false);
-				//Creates the background image
-				BackgroundImage backImage3= new BackgroundImage(image3, BackgroundRepeat.NO_REPEAT,
-						BackgroundRepeat.NO_REPEAT,
-						BackgroundPosition.DEFAULT,
-						backSize3);
-				Background background4 = new Background(backImage3);
+		Image image3 = null;
+		try {
+			image3 = new Image (new FileInputStream ("Resources/LeaderboardBackground.png"));
+		} catch (FileNotFoundException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+		//Sets size of background area
+		BackgroundSize backSize3 = new BackgroundSize(800, 600, false, false, false, false);
+		//Creates the background image
+		BackgroundImage backImage3= new BackgroundImage(image3, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,
+				backSize3);
+		Background background4 = new Background(backImage3);
 
 		//CREATES MENU
 		BorderPane pane = new BorderPane();
@@ -413,13 +431,15 @@ public class MainApplication extends Application {
 		BorderPane pane2 = new BorderPane();
 		pane2.setBackground(background2);
 
+		group.getChildren().add(0, root);
+
 		//LEADERBOARD MENU
 		BorderPane pane3 = new BorderPane();
 		pane3.setBackground(background4);
 
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
-		scene = new Scene(root,800,500);
+		scene = new Scene(group,800,500);
 		sceneLeaderboard = new Scene(pane3,800,500);
 
 		//Changes scene on button cick
@@ -462,6 +482,7 @@ public class MainApplication extends Application {
 				e1.printStackTrace();
 			}
 		});
+
 		settings.setOnAction(e -> mainWindow.setScene(sceneSettings));
 		exit.setOnAction(e ->Platform.exit());
 
@@ -480,7 +501,7 @@ public class MainApplication extends Application {
 		}
 		return -1;
 	}
-	
+
 	private String toString(String name, int score) {
 		String scoreSave = name + "SPLIT" + score;
 		return scoreSave;
