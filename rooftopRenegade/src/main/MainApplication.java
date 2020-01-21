@@ -43,7 +43,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
 /**
  * @author mimlo
  *
@@ -55,6 +54,9 @@ public class MainApplication extends Application {
 
 	Scene sceneMainMenu, sceneSettings, scene, sceneLeaderboard;
 	Stage stage;
+	Text settingText;
+
+	//Group groupSetting = new Group();
 	Group group = new Group();
 	Group leaderboardGroup = new Group();
 	Text scorePrint;
@@ -74,6 +76,7 @@ public class MainApplication extends Application {
 
 	static ImagePattern [] backgroundImages  = new ImagePattern [3];
 	Node icon;
+
 	private Player player = null;
 	ArrayList<Integer> leaderboardScore = new ArrayList<Integer>();
 	ArrayList <String> leaderboardName = new ArrayList<String>();
@@ -301,8 +304,6 @@ public class MainApplication extends Application {
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
-
-
 	}
 
 	private void coins() {
@@ -343,6 +344,7 @@ public class MainApplication extends Application {
 	}
 
 	public void start (Stage mainWindow) throws Exception {
+		//Sets the stage equal to the mainWindow
 		stage = mainWindow;
 
 		//load data from file
@@ -362,21 +364,26 @@ public class MainApplication extends Application {
 			System.err.print("File is empty");
 		}
 
+		//CREATES BUTTONS FOR THE MAIN MENU
+
+		//Start button
 		Button game = new Button();	
 		game.setStyle("-fx-background-image: url('main/startaButton.png')");
 		game.setMinSize(190,49);
 
+		//Settings button
 		Button settings = new Button();	
 		settings.setStyle("-fx-background-image: url('main/settingsButton.png')");
 		settings.setMinSize(190,49);
 
+		//Exit button
 		Button exit = new Button();	
 		exit.setStyle("-fx-background-image: url('main/exitButton.png')");
 		exit.setMinSize(190,49);
 
-
 		//CREATES BUTTON MENU
-		//Creates new gridpane and adds the buttons to the pane
+
+		//Creates new grid pane and adds the buttons to the pane
 		GridPane menu = new GridPane();
 		menu.add(game, 0, 0);
 		menu.add(settings, 0, 1);
@@ -391,12 +398,14 @@ public class MainApplication extends Application {
 		//Creates columns to put the buttons in
 		ColumnConstraints column1 = new ColumnConstraints();
 		ColumnConstraints column2 = new ColumnConstraints();
-		//Sets the space that each button occupy
+		//Sets the space that each button may occupy
+		//Creates columns for the buttons
 		column1.setPercentWidth(95);
 		column1.setHgrow(Priority.ALWAYS);
 		column2.setPercentWidth(5);
 		column2.setHgrow(Priority.ALWAYS);
 		menu.getColumnConstraints().addAll(column1,column2);
+		//Creates rows for the buttons
 		RowConstraints row1 = new RowConstraints(), row2 = new RowConstraints(), row3 = new RowConstraints();
 		row1.setPercentHeight(20);
 		row2.setPercentHeight(15);
@@ -407,11 +416,11 @@ public class MainApplication extends Application {
 		menu.getRowConstraints().addAll(row1,row2,row3);
 
 		//MENU BACKGROUND
+
 		Image image1 = null;
 		try {
 			image1 = new Image (new FileInputStream ("Resources/RRB.png"));
 		} catch (FileNotFoundException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		//Sets size of background area
@@ -423,12 +432,18 @@ public class MainApplication extends Application {
 				backSize);
 		Background background = new Background(backImage);
 
+		//CREATES MENU
+
+		BorderPane pane = new BorderPane();
+		pane.setCenter(menu);
+		pane.setBackground(background);
+
 		//SETTINGS BACKGROUND
+
 		Image image2 = null;
 		try {
-			image2 = new Image (new FileInputStream ("Resources/Settings Background(1).png"));
+			image2 = new Image (new FileInputStream ("Resources/SettingsBack1.png"));
 		} catch (FileNotFoundException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		//Sets size of background area
@@ -440,12 +455,56 @@ public class MainApplication extends Application {
 				backSize2);
 		Background background2 = new Background(backImage2);
 
+		//CREATES SETTINGS BUTTONS
+
+		//Back button
+		Button back = new Button();	
+		back.setStyle("-fx-background-image: url('main/backButton.png')");
+		back.setMinSize(190,49);
+
+		//Mute button
+		Button mute = new Button();	
+		mute.setStyle("-fx-background-image: url('main/muteButton.png')");
+		mute.setMinSize(190,49);
+
+		//CREATES SETTINGS 
+
+		//Creates grid pane to put buttons on
+		GridPane settingGrid = new GridPane();
+		settingGrid.add(back,1,0);
+		settingGrid.add(mute,2,0);
+
+		//Aligns the buttons
+		GridPane.setHalignment(back,HPos.CENTER);
+		GridPane.setValignment(back,VPos.BOTTOM);
+		GridPane.setHalignment(mute,HPos.CENTER);
+		GridPane.setValignment(mute,VPos.BOTTOM);
+		//Creates 4 columns for the buttons to go into
+		ColumnConstraints columnSettings = new ColumnConstraints();
+		ColumnConstraints columnSettings2 = new ColumnConstraints();
+		ColumnConstraints columnSettings3 = new ColumnConstraints();
+		ColumnConstraints columnSettings4 = new ColumnConstraints();
+		columnSettings.setPercentWidth(10);
+		columnSettings.setHgrow(Priority.ALWAYS);
+		columnSettings2.setPercentWidth(40);
+		columnSettings2.setHgrow(Priority.ALWAYS);
+		columnSettings3.setPercentWidth(40);
+		columnSettings3.setHgrow(Priority.ALWAYS);
+		columnSettings4.setPercentWidth(10);
+		columnSettings4.setHgrow(Priority.ALWAYS);
+		settingGrid.getColumnConstraints().addAll(columnSettings,columnSettings2,columnSettings3,columnSettings4);
+		//Creates a row for the buttons
+		RowConstraints rowSettings = new RowConstraints();
+		rowSettings.setPercentHeight(95);
+		settingGrid.getRowConstraints().addAll(rowSettings);
+
+		//Adds grid pane to boarder pane
+
 		//LEADERBOARD BACKGROUND
 		Image image3 = null;
 		try {
 			image3 = new Image (new FileInputStream ("Resources/LeaderboardBackground.png"));
 		} catch (FileNotFoundException e3) {
-			// TODO Auto-generated catch block
 			e3.printStackTrace();
 		}
 		//Sets size of background area
@@ -457,27 +516,51 @@ public class MainApplication extends Application {
 				backSize3);
 		Background background4 = new Background(backImage3);
 
-		//CREATES MENU
-		BorderPane pane = new BorderPane();
-		pane.setCenter(menu);
-		pane.setBackground(background);
-
 		//CREATES SETTINGS
 		BorderPane pane2 = new BorderPane();
+		pane2.setBackground(background2);
+		pane2.setCenter(settingGrid);
+
+		//CREATE GAME SCREEN
+
+		BorderPane pane3 = new BorderPane();
+
 		pane2.setBackground(background2);
 
 		group.getChildren().add(0, root);
 
+		//LEADERBOARD BUTTONS
+		//Back button
+		GridPane leaderboardGrid = new GridPane();
+		Button back2 = new Button();	
+		back2.setStyle("-fx-background-image: url('main/backButton.png')");
+		back2.setMinSize(190,49);
+		leaderboardGrid.add(back2,0,0);
+
+
+		GridPane.setHalignment(back2,HPos.CENTER);
+		GridPane.setValignment(back2,VPos.BOTTOM);
+		ColumnConstraints columnLeaderboard = new ColumnConstraints();
+		columnLeaderboard.setPercentWidth(100);
+		columnLeaderboard.setHgrow(Priority.ALWAYS);
+		leaderboardGrid.getColumnConstraints().addAll(columnLeaderboard);
+
+		RowConstraints rowLeaderboard = new RowConstraints();
+		rowLeaderboard.setPercentHeight(100);
+		leaderboardGrid.getRowConstraints().addAll(rowLeaderboard);
+
 		//LEADERBOARD MENU
 		pane3.setBackground(background4);
 
-
+		pane3.setCenter(leaderboardGrid);
 		sceneMainMenu = new Scene(pane,800,500);
 		sceneSettings = new Scene(pane2,800,500);
 		scene = new Scene(group,800,500);
 		sceneLeaderboard = new Scene(pane3,800,500);
 
-		//Changes scene on button cick
+		//BUTTON CLICK COMMANDS
+
+		//Changes scene on button click to the game scene
 		game.setOnAction(e -> {
 			try {
 				GamePlatform s = new GamePlatform(0, 340, 800, 5,  "platform", Color.BLACK);
@@ -498,7 +581,6 @@ public class MainApplication extends Application {
 
 				}
 				jumpButton = KeyCode.ALT;
-
 
 
 				scene.setOnKeyPressed(f -> {
@@ -522,17 +604,23 @@ public class MainApplication extends Application {
 				mainWindow.setScene(scene);
 				mainWindow.show();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+
 		});
+		//Changes scene on button click to the settings window
 
 		settings.setOnAction(e -> mainWindow.setScene(sceneSettings));
+
+		//Changes scene on button click (exits game)
 		exit.setOnAction(e ->Platform.exit());
+
+		//Changes scene on button click (does back to main menu
+		back.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
+		back2.setOnAction(e -> mainWindow.setScene(sceneMainMenu));
 
 		mainWindow.setTitle("Rooftop Renegade");
 		mainWindow.setResizable(false);	
-
 		mainWindow.setScene(sceneMainMenu);
 		mainWindow.show();
 	}

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 MikeSPLIT200000000
 Leo SPLIT900
 YeetSPLIT509
 Sam SPLIT500
 Leo SPLIT453
+=======
+MikeSPLIT200000000
+Leo SPLIT900
+YeetSPLIT509
+Sam SPLIT500
+sammSPLIT161
+>>>>>>> branch 'master' of https://github.com/RCI-ICS4U1/ics4u1-2019-culminating-invalid-input-exception.git

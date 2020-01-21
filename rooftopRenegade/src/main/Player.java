@@ -15,7 +15,6 @@ public class Player extends Sprite{
 
 	private boolean dead = false;
 
-
 	/**
 	 * Calls the Superclass constructor and creates an AnimationTimer for the player object.
 	 * 
