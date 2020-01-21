@@ -5,7 +5,7 @@ import javafx.scene.paint.ImagePattern;
 /**
  * Player.java
  * This class extends the sprite class, and is used to create a player object for the game.
- * This class takes care of player jumping as well as gravity and antigravity.
+ * This class takes care of player jumping as well as gravity and antigravity.<br><br>
  * Jan 21, 2020
  * @author leonard
  *

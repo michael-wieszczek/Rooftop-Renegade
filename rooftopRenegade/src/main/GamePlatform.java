@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
  * Platform.java
  * This class extends the sprite class, and is used to create platform objects for the game.
  * This class takes care of the platforms in the game, making sure they are always moving to the left,
- * as well as returning the top edge of the object to be used for walking and jumping in the game.
+ * as well as returning the top edge of the object to be used for walking and jumping in the game.<br><br>
  * Jan 21, 2020
  * @author leonard
  *
@@ -31,8 +31,8 @@ public class GamePlatform extends Sprite{
 	 * @param type
 	 * Initial type of sprite, used for super class. Currently not being used in program, but useful 
 	 * for further development of the game.
-	 * @param imagePattern
-	 * Sets an imagePattern as the fill for the player object shape.
+	 * @param color
+	 * Sets a color as the initial fill of the platform object.
 	 */
 	public GamePlatform(int x, int y, int w, int h, String type, Color color) {
 		super(x, y, w, h, type, color);

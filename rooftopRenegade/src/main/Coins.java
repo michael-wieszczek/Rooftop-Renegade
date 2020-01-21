@@ -7,7 +7,7 @@ import javafx.scene.paint.ImagePattern;
  * Coins.java
  * This class extends the sprite class, and is used to create coin objects for the game.
  * This class makes sure that all coin objects are constantly moving from the right side of the screen
- * to the left.
+ * to the left.<br><br>
  * Jan 21, 2020
  * @author leonard
  *
