@@ -220,6 +220,9 @@ public class MainApplication extends Application {
 	}
 
 	public void dead(AnimationTimer timer) {
+		for(int i = 0; i < 5; i++) {
+			pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
+		}
 		int leaderboardPos = linear(leaderboardScore, score);
 		timer.stop();
 		scorePoints.stop();
@@ -590,9 +593,6 @@ public class MainApplication extends Application {
 				sceneLeaderboard.setOnKeyPressed(f -> {
 					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
 						mainWindow.setScene(sceneMainMenu);
-						for(int i = 0; i < 5; i++) {
-							pane3.getChildren().removeAll(highScores[i], highScoreNames[i]);
-						}
 					}
 				});
 				background3.setFill(backgroundImages[0]);
