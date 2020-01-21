@@ -9,7 +9,7 @@ public class GameBackground extends Sprite{
 		super(x, y, w, h, type, imagePattern);
 
 		this.xSpeed = 1;
-		
+
 		AnimationTimer timer = new AnimationTimer() {
 
 			public void handle(long now) {
@@ -24,6 +24,6 @@ public class GameBackground extends Sprite{
 	private void moveLeft() {
 		setX(getX() - 1);
 	}
-	
+
 
 }

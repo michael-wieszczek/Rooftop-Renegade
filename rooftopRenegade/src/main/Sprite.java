@@ -18,7 +18,7 @@ public class Sprite extends Rectangle{
 		setX(x);
 		setY(y);
 	}
-	
+
 	Sprite(int x, int y, int w, int h, String type, Color color) {
 
 		super(w, h, color);
