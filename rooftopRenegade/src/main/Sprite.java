@@ -14,7 +14,6 @@ public class Sprite extends Rectangle{
 
 	Sprite(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(w, h, imagePattern);
-		System.out.println(type);
 		this.type = type;
 		setX(x);
 		setY(y);
@@ -23,7 +22,6 @@ public class Sprite extends Rectangle{
 	Sprite(int x, int y, int w, int h, String type, Color color) {
 
 		super(w, h, color);
-		System.out.println(type);
 		this.type = type;
 		setX(x);
 		setY(y);

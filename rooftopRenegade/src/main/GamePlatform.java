@@ -8,11 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import javafx.scene.paint.ImagePattern;
 
-public class Platform extends Sprite{
+public class GamePlatform extends Sprite{
 	private double speed = 7;
 	int top;
 
-	public Platform(int x, int y, int w, int h, String type, Color color) {
+	public GamePlatform(int x, int y, int w, int h, String type, Color color) {
 		super(x, y, w, h, type, color);
 
 		this.top = top;
@@ -45,4 +45,3 @@ public class Platform extends Sprite{
 	}
 
 }
-

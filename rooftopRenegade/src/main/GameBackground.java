@@ -4,8 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 
-public class Background extends Sprite{
-	public Background(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
+public class GameBackground extends Sprite{
+	public GameBackground(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(x, y, w, h, type, imagePattern);
 
 		this.xSpeed = 1;
@@ -22,7 +22,7 @@ public class Background extends Sprite{
 	}
 
 	private void moveLeft() {
-		setX(getX() - 2);
+		setX(getX() - 1);
 	}
 	
 
