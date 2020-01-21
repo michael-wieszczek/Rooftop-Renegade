@@ -19,23 +19,23 @@ public class Player extends Sprite{
 	private boolean dead = false;
 
 
-/**
- * Calls the Superclass constructor and creates an AnimationTimer for the player object.
- * 
- * @param x
- * Initial x position
- * @param y
- * Initial y position
- * @param w
- * Initial width size
- * @param h
- * Initial height size
- * @param type
- * Initial type of sprite, used for super class. Currently not being used in program, but useful 
- * for further development of the game.
- * @param imagePattern
- * Sets an imagePattern as the fill for the player object shape.
- */
+	/**
+	 * Calls the Superclass constructor and creates an AnimationTimer for the player object.
+	 * 
+	 * @param x
+	 * Initial x position
+	 * @param y
+	 * Initial y position
+	 * @param w
+	 * Initial width size
+	 * @param h
+	 * Initial height size
+	 * @param type
+	 * Initial type of sprite, used for super class. Currently not being used in program, but useful 
+	 * for further development of the game.
+	 * @param imagePattern
+	 * Sets an imagePattern as the fill for the player object shape.
+	 */
 	Player(int x, int y, int w, int h, String type, ImagePattern imagePattern) {
 		super(x, y, w, h, type, imagePattern);
 
