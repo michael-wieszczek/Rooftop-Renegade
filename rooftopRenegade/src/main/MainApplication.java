@@ -184,16 +184,13 @@ public class MainApplication extends Application {
 
 	public void dead(AnimationTimer timer) {
 		int leaderboardPos = linear(leaderboardScore, score);
-		System.out.println(leaderboardPos);
 		timer.stop();
 		scorePoints.stop();
 		stage.setScene(sceneLeaderboard);
 		//Display Number of Coins
 		if(leaderboardPos == -1) {
-			System.out.println("yeet");
 		}
 		else if (leaderboardPos > 4){
-			System.out.println("meet");
 		}
 		else {
 			leaderboardScore.add(leaderboardPos, score);
@@ -477,7 +474,6 @@ public class MainApplication extends Application {
 
 	public static int linear(ArrayList<Integer> arr, int target) {
 		for(int i = 0; i < arr.size(); i++) {
-			System.out.println(arr.get(i));
 			if(target > arr.get(i)) {
 				return i;
 			}
