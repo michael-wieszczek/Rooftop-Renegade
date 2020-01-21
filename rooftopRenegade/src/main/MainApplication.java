@@ -285,6 +285,7 @@ public class MainApplication extends Application {
 		score = 0;
 		isDead = false;
 		counter = 0;
+		group.getChildren().remove(scorePrint);
 		backgrounds.clear();
 		//Make a button, when pressed runs the code underneath
 	}
