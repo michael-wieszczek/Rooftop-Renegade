@@ -349,7 +349,7 @@ public class MainApplication extends Application {
 		}
 		if(platforms.isEmpty()) {
 		}
-		else if(platforms.get(platforms.size() - 1).getX() <= 250) {
+		else if(platforms.get(platforms.size() - 1).getX() <= 350) {
 			p = new GamePlatform(800, 400, (int)(Math.random() * 3 + 2) * 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
