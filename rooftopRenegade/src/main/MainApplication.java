@@ -343,14 +343,14 @@ public class MainApplication extends Application {
 	 */
 	private void platform() {
 		if((int)(Math.random() * 1000) <= 15) {
-			p = new GamePlatform(800, (int)(Math.random() * 8 + 7) * 30, (int)(Math.random() * 500) + 100, 7, "platform", Color.DARKORANGE);
+			p = new GamePlatform(800, (int)(Math.random() * 7 + 7) * 30, (int)(Math.random() * 4 + 2) * 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
 		if(platforms.isEmpty()) {
 		}
-		else if(platforms.get(platforms.size() - 1).getX() <= 300) {
-			p = new GamePlatform(800, 400, (int)(Math.random() * 300) + 100, 7, "platform", Color.DARKORANGE);
+		else if(platforms.get(platforms.size() - 1).getX() <= 250) {
+			p = new GamePlatform(800, 400, (int)(Math.random() * 3 + 2) * 100, 7, "platform", Color.DARKORANGE);
 			platforms.add(p);
 			root.getChildren().add(p);
 		}
