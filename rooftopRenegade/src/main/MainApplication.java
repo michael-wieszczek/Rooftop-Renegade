@@ -650,11 +650,6 @@ public class MainApplication extends Application {
 					}
 				});
 
-				sceneLeaderboard.setOnKeyPressed(f -> {
-					if(f.getCode() == KeyCode.W || f.getCode() == KeyCode.UP || f.getCode() == KeyCode.SPACE) {
-						mainWindow.setScene(sceneMainMenu);
-					}
-				});
 				background3.setFill(backgroundImages[0]);
 				backgrounds.add(background3);
 				player = new Player(300, 280, 40, 60, "player", playerRun);
